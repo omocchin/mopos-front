@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 interface Props {
-  width: Number
+  width: number
 }
 
 const props = withDefaults(defineProps<Props>(), {

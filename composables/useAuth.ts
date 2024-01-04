@@ -1,18 +1,29 @@
 import { useApiFetch } from "./useApiFetch"
 
-const requestCompanyLogin = async (body: any) => {
+interface CompanyLoginRequest {
+  login_id: string;
+  password: string;
+}
+
+interface CompanyLoginResponse {
+  company_id: string;
+  company_name: string;
+  token: string;
+}
+
+const requestCompanyLogin = async (body: CompanyLoginRequest) => {
   console.log('body', body)
-  const { data, status } = await useApiFetch('v1/company_login', {
+  const { data, status, error } = await useApiFetch('v1/company_login', {
     method: 'POST',
     body: body
   })
-  if (status.value == 'success') {
-    return data
-  } else {
-    return false
-  }
+  return [data, status, error]
 }
 
 export {
   requestCompanyLogin
-}
+};
+export type {
+  CompanyLoginResponse
+};
+

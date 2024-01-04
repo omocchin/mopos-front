@@ -3,7 +3,7 @@
     <v-text-field
       :label="label"
       :type="type"
-      :value="modelValue"
+      :model-value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>
@@ -11,14 +11,14 @@
 
 <script setup lang="ts">
 interface Props {
-  modelValue: String,
+  modelValue: string,
   label: String,
   type?: String,
 }
 const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   type: undefined,
-  modelValue: undefined,
+  modelValue: '',
 })
 
 defineEmits(['update:modelValue'])
