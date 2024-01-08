@@ -32,7 +32,6 @@
 
 <script setup lang="ts">
 import { ref } from '#imports';
-import { useAuthStore } from '@/stores/auth.ts';
 import AuthBase from '~/components/auth/AuthBase.vue';
 import CustomInput from '~/components/input/CustomInput.vue'
 import CustomButton from '~/components/input/CustomButton.vue';
@@ -52,15 +51,16 @@ const setError = (show: boolean, message: string) => {
 }
 
 const login = async () => {
-  const [result, data] = await companyLogin(loginId.value, password.value)
-  setError(false, '')
-  if (!result) {
-    if (data.value.statusCode == 404) {
+  await companyLogin(loginId.value, password.value).then((data) => {
+    setError(false, '')
+    console.log('yay', data)
+  }).catch((e) => {
+    if (e.status == 404) {
       setError(true, 'Incorrect ID or password. Please try again.')
     }
-  } else {
-    console.log(data)
-    console.log('success')
-  }
+    else {
+      setError(true, e.message)
+    }
+  })
 }
 </script>

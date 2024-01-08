@@ -1,4 +1,6 @@
 import { requestCompanyLogin, type CompanyLoginResponse } from "#imports"
+import { CustomError } from "~/common/classes/customs"
+import { type ErrorResponse } from "~/common/interfaces/errors"
 
 export const useAuthStore = defineStore('counter', () => {
   const token = ref('')
@@ -20,13 +22,14 @@ export const useAuthStore = defineStore('counter', () => {
       "password": password
     })
     const response: CompanyLoginResponse = data.value
+    const errorResponse: ErrorResponse = error.value
     if (status.value == 'success') {
       setToken(response.token)
       setCompanyId(response.company_id)
       setCompanyName(response.company_name)
-      return [true, response]
+      return response
     } else {
-      return [false, error]
+      throw new CustomError(errorResponse.data.message, { status: error.value.statusCode })
     }
   }
 
