@@ -1,6 +1,6 @@
 import { requestCompanyLogin, type CompanyLoginResponse } from "#imports"
-import { CustomError } from "~/common/classes/customs"
-import { type ErrorResponse } from "~/common/interfaces/errors"
+import { CustomError } from "~/utils/classes/customs"
+import { type ErrorResponse } from "~/utils/interfaces/errors"
 
 export const useAuthStore = defineStore('counter', () => {
   const token = ref('')
