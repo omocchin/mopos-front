@@ -11,7 +11,7 @@
         prepend-icon="mdi-office-building-outline"
         hide-details
       >
-        {{ companyName }}
+        {{ company }}
       </v-input>
       <v-select
         class="company-user-selector"
@@ -66,6 +66,7 @@ const activeClock = ref<boolean>(false)
 const snackBar = ref<boolean>(false)
 const barMessage = ref<string>('')
 const barColor = ref<string>('')
+const company = ref<string>('')
 
 const menuEvent = (event: string) => {
   if (event === 'clockInOut') {
@@ -92,6 +93,7 @@ const closeClock = (event: ClockInOutResponse) =>{
 
 onMounted(() => {
   selectedUser.value =  activeUsers.find(({user_number}) => user_number == currentUser)?.user_number
+  company.value = companyName
 })
 
 watch(selectedUser, (newValue) => {
