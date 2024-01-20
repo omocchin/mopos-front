@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     },
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
   css: [
     '~/assets/css/common.scss'
@@ -44,5 +45,8 @@ export default defineNuxtConfig({
         changeOrigin: true,
       },
     }
-  }
+  },
+  piniaPersistedstate: {
+    storage: 'localStorage'
+  },
 })

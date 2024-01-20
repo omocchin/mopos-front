@@ -53,7 +53,6 @@ const setError = (show: boolean, message: string) => {
 const login = async () => {
   await companyLogin(loginId.value, password.value).then((data) => {
     setError(false, '')
-    console.log('yay', data)
   }).catch((e) => {
     if (e.status == 404) {
       setError(true, 'Incorrect ID or password. Please try again.')

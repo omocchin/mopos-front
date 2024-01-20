@@ -12,8 +12,8 @@
 <script setup lang="ts">
 interface Props {
   modelValue: string,
-  label: String,
-  type?: String,
+  label?: string,
+  type?: string,
 }
 const props = withDefaults(defineProps<Props>(), {
   label: undefined,

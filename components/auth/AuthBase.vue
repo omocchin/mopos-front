@@ -1,6 +1,6 @@
 <template>
   <div class="h-100 d-flex justify-center align-center">
-    <base-card :width="300">
+    <base-card :customClass="['pa-3']" :width="'300'">
       <h1 class="d-flex justify-center">{{ title }}</h1>
       <slot></slot>
     </base-card>

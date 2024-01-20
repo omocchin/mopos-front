@@ -12,7 +12,6 @@ interface CompanyLoginResponse {
 }
 
 const requestCompanyLogin = async (body: CompanyLoginRequest) => {
-  console.log('body', body)
   const { data, status, error } = await useApiFetch('v1/company_login', {
     method: 'POST',
     body: body

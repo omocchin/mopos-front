@@ -1,9 +1,10 @@
 <template>
   <v-card
-    class="pa-3 ma-auto"
-    color="background"
+    :class="customClass"
+    :color="color || 'background'"
     elevation="16"
     :width="width"
+    :height="height"
   >
     <slot></slot>
   </v-card>
@@ -11,10 +12,16 @@
 
 <script setup lang="ts">
 interface Props {
-  width: number
+  width?: string | number
+  height?: string | number
+  customClass?: Array<string>
+  color?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  width: undefined
+  width: '',
+  height: '',
+  customClass: undefined,
+  color: undefined,
 })
 </script>

@@ -2,10 +2,15 @@ import { requestCompanyLogin, type CompanyLoginResponse } from "#imports"
 import { CustomError } from "~/utils/classes/customs"
 import { type ErrorResponse } from "~/utils/interfaces/errors"
 
-export const useAuthStore = defineStore('counter', () => {
-  const token = ref('')
-  const companyId = ref('')
-  const companyName = ref('')
+interface UserInfo {
+  name: string
+}
+
+export const useAuthStore = defineStore('auth', () => {
+  const token = ref<string>('')
+  const companyId = ref<string>('')
+  const companyName = ref<string>('')
+  const users = ref<Array<UserInfo>>([])
 
   const setToken = (tokenVal: string) => {
     token.value = tokenVal
@@ -15,6 +20,9 @@ export const useAuthStore = defineStore('counter', () => {
   }
   const setCompanyName = (companyNameVal: string) => {
     companyName.value = companyNameVal
+  }
+  const setUser = (userInfo: UserInfo) => {
+    users.value.push(userInfo)
   }
   const companyLogin = async (loginId: string, password: string) => {
     const [data, status, error] = await requestCompanyLogin({
@@ -33,5 +41,8 @@ export const useAuthStore = defineStore('counter', () => {
     }
   }
 
-  return { token, companyId, companyName, setToken, setCompanyId, setCompanyName, companyLogin }
+  return { token, companyId, companyName, users, setToken, setCompanyId, setCompanyName, companyLogin, setUser }
+},
+{
+  persist: true
 })

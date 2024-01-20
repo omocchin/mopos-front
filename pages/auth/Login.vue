@@ -36,6 +36,7 @@ import AuthBase from '~/components/auth/AuthBase.vue';
 import CustomInput from '~/components/input/CustomInput.vue'
 import CustomButton from '~/components/input/CustomButton.vue';
 
+const router = useRouter()
 const store = useAuthStore()
 const { companyLogin } = store
 
@@ -53,7 +54,7 @@ const setError = (show: boolean, message: string) => {
 const login = async () => {
   await companyLogin(loginId.value, password.value).then((data) => {
     setError(false, '')
-    console.log('yay', data)
+    router.push({path: '/home'})
   }).catch((e) => {
     if (e.status == 404) {
       setError(true, 'Incorrect ID or password. Please try again.')

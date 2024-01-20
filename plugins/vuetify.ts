@@ -10,10 +10,14 @@ const myCustomLightTheme: ThemeDefinition = {
     primary: '#EADBC8',
     secondary: 'DAC0A3',
     accent: '#102C57',
+    backred: '#D55454',
+    clearyellow: '#E6AE45',
     error: '#B00020',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FB8C00',
+    clockin: '#4bb0db',
+    clockout: '#ff8081',
   },
 }
 
