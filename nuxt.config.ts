@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    '@vee-validate/nuxt',
   ],
   css: [
     '~/assets/css/common.scss'

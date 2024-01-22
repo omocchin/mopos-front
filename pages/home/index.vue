@@ -78,7 +78,7 @@ const closeClock = (event: ClockInOutResponse) =>{
   } else if (event.status === 'clocked_out') {
     barControl(`Bye ${event.first_name}, please go home safe.`, 'clockout')
   } else {
-    barControl()
+    return
   }
 }
 </script>

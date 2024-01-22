@@ -13,7 +13,7 @@ interface ClockInOutResponse {
 }
 
 const requestClockInOut = async (body: ClockInOutRequest) => {
-  const { data, status, error } = await useApiFetch('v1//user/clock_in_out', {
+  const { data, status, error } = await useApiFetch('v1/user/clock_in_out', {
     method: 'POST',
     body: body
   }
