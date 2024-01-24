@@ -1,6 +1,7 @@
-import { requestCompanyLogin, type CompanyLoginResponse } from "#imports"
+import { requestCompanyLogin, requestCompanyLogout, type CompanyLoginResponse } from "#imports"
 import { CustomError } from "~/utils/classes/customs"
 import { type ErrorResponse } from "~/utils/interfaces/errors"
+// import { useUserStore } from '~/stores/user'
 
 interface UserInfo {
   name: string
@@ -11,6 +12,8 @@ export const useAuthStore = defineStore('auth', () => {
   const companyId = ref<string>('')
   const companyName = ref<string>('')
   const users = ref<Array<UserInfo>>([])
+  const userStore = useUserStore()
+  const { addActiveUser, emptyActiveUser, removeCurrentUser } = userStore
 
   const setToken = (tokenVal: string) => {
     token.value = tokenVal
@@ -35,13 +38,38 @@ export const useAuthStore = defineStore('auth', () => {
       setToken(response.token)
       setCompanyId(response.company_id)
       setCompanyName(response.company_name)
+      if (response.active_users.length > 0) {
+        response.active_users.forEach((user) => addActiveUser(user))
+      }
       return response
     } else {
       throw new CustomError(errorResponse.data.message, { status: error.value.statusCode })
     }
   }
+  
+  const companyLogout = async () => {
+    const [data, status, error] = await requestCompanyLogout()
+    if (status.value === 'success') {
+      emptyActiveUser()
+      removeCurrentUser()
+      return true
+    } else {
+      return false
+    }
+  }
 
-  return { token, companyId, companyName, users, setToken, setCompanyId, setCompanyName, companyLogin, setUser }
+  return {
+    token,
+    companyId,
+    companyName,
+    users,
+    setToken,
+    setCompanyId,
+    setCompanyName,
+    companyLogin,
+    setUser,
+    companyLogout
+  }
 },
 {
   persist: true

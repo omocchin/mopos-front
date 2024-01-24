@@ -8,6 +8,10 @@ export const useUserStore = defineStore('user', () => {
 
   const addActiveUser = (user: ClockInOutResponse) => {
     activeUsers.value.push(user)
+  }
+
+  const emptyActiveUser = () => {
+    activeUsers.value = []
   } 
   
   const removeActiveUser = (user: ClockInOutResponse) => {
@@ -17,6 +21,10 @@ export const useUserStore = defineStore('user', () => {
 
   const setCurrentUser = (userNumber: string | null) => {
     currentUser.value = userNumber ? Number(userNumber) : null
+  }
+
+  const removeCurrentUser = () => {
+    currentUser.value = null
   }
 
   const userClockInOut = async (body: ClockInOutRequest) => {
@@ -35,7 +43,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return {activeUsers, currentUser, userClockInOut, setCurrentUser}
+  return {addActiveUser, activeUsers, currentUser, userClockInOut, setCurrentUser, emptyActiveUser, removeCurrentUser}
 },
 {
   persist: true

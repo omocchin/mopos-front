@@ -55,9 +55,11 @@ import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { ref } from 'vue';
 import { drawerItems } from '~/utils/variables/navBarItems';
 import { useAuthStore } from '~/stores/auth'
+
 const authStore = useAuthStore()
 const userStore = useUserStore()
-const { companyName } = authStore
+const router = useRouter()
+const { companyName, companyLogout } = authStore
 const { activeUsers, currentUser, setCurrentUser } = userStore
 
 const drawer = ref<boolean>(false)
@@ -68,9 +70,12 @@ const barMessage = ref<string>('')
 const barColor = ref<string>('')
 const company = ref<string>('')
 
-const menuEvent = (event: string) => {
+const menuEvent = async (event: string) => {
   if (event === 'clockInOut') {
     activeClock.value = !activeClock.value
+  } else if (event === 'logout') {
+    const result = await companyLogout()
+    if (result) router.push({path: '/auth/login'})
   }
 }
 

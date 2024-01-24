@@ -13,8 +13,8 @@ const drawerItems = [
   },
   {
     title: 'LOGOUT',
-    action: 'url',
-    url: '/auth/login',
+    action: 'event',
+    value: 'logout',
     icon: 'mdi-logout-variant'
   }
 ]
