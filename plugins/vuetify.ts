@@ -21,12 +21,31 @@ const myCustomLightTheme: ThemeDefinition = {
   },
 }
 
+const myCustomDarkTheme: ThemeDefinition = {
+  dark: true,
+  colors: {
+    background: '#121212',
+    primary: '#282828',
+    secondary: '#3f3f3f',
+    accent: '#f4988b',
+    backred: '#D55454',
+    clearyellow: '#E6AE45',
+    error: '#B00020',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FB8C00',
+    clockin: '#4bb0db',
+    clockout: '#ff8081',
+  },
+}
+
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     theme: {
       defaultTheme: 'myCustomLightTheme',
       themes: {
         myCustomLightTheme,
+        myCustomDarkTheme
       },
     },
   })

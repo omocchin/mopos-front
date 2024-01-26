@@ -24,6 +24,7 @@ import BaseButton from '~/components/ui/BaseButton.vue';
 import ClockModal from '~/components/home/ClockModal.vue';
 import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { type ClockInOutResponse } from '#imports';
+import { useTheme } from 'vuetify'
 
 const menuItems = [
   {
@@ -40,13 +41,11 @@ const menuItems = [
     mode: 'action',
     value: 'clock_in_out',
     title: 'CLOCK IN/OUT',
-    link: '/auth/login'
   },
   {
     mode: 'action',
     value: 'management', 
     title: 'MANAGEMENT',
-    link: '/auth/login'
   },
 ]
 
@@ -54,14 +53,19 @@ const snackBar = ref<boolean>(false)
 const barMessage = ref<string>('')
 const barColor = ref<string>('')
 const clockInOut = ref<boolean>(false)
+const theme = useTheme()
+const router = useRouter()
 
 definePageMeta({
   layout: 'custom'
 })
 
 const menuEvent = (targetAction: string) => {
-  if (targetAction == 'clock_in_out') {
+  if (targetAction === 'clock_in_out') {
     clockInOut.value = true
+  } else if (targetAction === 'management') {
+    // theme.global.name.value = 'myCustomDarkTheme'
+    router.push({path: '/management/login'})
   }
 }
 
