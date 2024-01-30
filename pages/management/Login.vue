@@ -40,6 +40,33 @@ definePageMeta({
   layout: 'custom'
 })
 
+const store = useUserStore()
+const {userLogin} = store
+
 const userNumber = ref()
 const password = ref()
+
+const error = ref(false)
+const errorMessage = ref()
+
+const setError = (show: boolean, message: string) => {
+  error.value = show
+  errorMessage.value = message
+}
+
+const login = async () => {
+  await userLogin({
+    user_number: userNumber.value,
+    password: password.value
+  }).then((data) => {
+    setError(false, '')
+    // router.push({path: '/home'})
+  }).catch((e) => {
+    if (e.status == 404) {
+      setError(true, 'Incorrect ID or password. Please try again.')
+    } else {
+      setError(true, e.message)
+    }
+  })
+}
 </script>

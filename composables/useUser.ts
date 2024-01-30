@@ -12,6 +12,17 @@ interface ClockInOutResponse {
   time: string
 }
 
+interface UserLoginRequest {
+  user_number: string
+  password: string
+}
+
+interface UserLoginResponse {
+  user_name: string
+  token: string
+  authority: number
+}
+
 const requestClockInOut = async (body: ClockInOutRequest) => {
   const { data, status, error } = await useApiFetch('v1/user/clock_in_out', {
     method: 'POST',
@@ -21,11 +32,23 @@ const requestClockInOut = async (body: ClockInOutRequest) => {
   return [data, status, error]
 }
 
+const requestUserLogin = async (body: UserLoginRequest) => {
+  const { data, status, error } = await useApiFetch('v1/user_login', {
+    method: 'POST',
+    body: body
+  }
+  )
+  return [data, status, error]
+}
+
 export {
-  requestClockInOut
+  requestClockInOut,
+  requestUserLogin
 }
 
 export type {
   ClockInOutResponse,
-  ClockInOutRequest
+  ClockInOutRequest,
+  UserLoginRequest,
+  UserLoginResponse
 }
