@@ -21,12 +21,6 @@
         @action="login"
       />
     </form>
-    <custom-button
-      mode="link"
-      link="/auth/signup"
-      class="w-100"
-      text="Signup instead"
-    />
   </auth-base>
 </template>
 
@@ -42,6 +36,7 @@ definePageMeta({
 
 const store = useUserStore()
 const {userLogin} = store
+const router = useRouter()
 
 const userNumber = ref()
 const password = ref()
@@ -60,7 +55,7 @@ const login = async () => {
     password: password.value
   }).then((data) => {
     setError(false, '')
-    // router.push({path: '/home'})
+    router.push({path: '/management/home'})
   }).catch((e) => {
     if (e.status == 404) {
       setError(true, 'Incorrect ID or password. Please try again.')

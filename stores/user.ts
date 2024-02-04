@@ -3,7 +3,7 @@ import {
   requestUserLogin,
   type ClockInOutResponse,
   type ClockInOutRequest,
-  type userLoginRequest,
+  type UserLoginRequest,
   type UserLoginResponse
 } from "#imports";
 import { CustomError } from "~/utils/classes/customs"
@@ -65,14 +65,15 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const userLogin = async (body: userLoginRequest) => {
+  const userLogin = async (body: UserLoginRequest) => {
     const [data, status, error] = await requestUserLogin(body)
     const response: UserLoginResponse = data.value
     const errorResponse: ErrorResponse = error.value
     if (status.value === 'success') {
       if (response.authority != 4) {
+        console.log(response)
         setUserToken(response.token)
-        setUserName(response.user_name)
+        setUserName(response.name)
         setUserAuthority(response.authority)
         return response
       } else {
@@ -83,7 +84,19 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return {addActiveUser, activeUsers, currentUser, userClockInOut, setCurrentUser, emptyActiveUser, removeCurrentUser}
+  return {
+    addActiveUser,
+    activeUsers,
+    userToken,
+    userName,
+    userAuthority,
+    currentUser,
+    userClockInOut,
+    setCurrentUser,
+    emptyActiveUser,
+    removeCurrentUser,
+    userLogin
+  }
 },
 {
   persist: true
