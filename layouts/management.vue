@@ -11,14 +11,14 @@
         prepend-icon="mdi-office-building-outline"
         hide-details
       >
-        {{ companyName }}
+        {{ company }}
       </v-input>
       <v-input
         class="company-user-selector"
         prepend-icon="mdi-account"
         hide-details
       >
-        {{ userName }}
+        {{ user }}
       </v-input>
     </v-app-bar>
     <v-navigation-drawer
@@ -59,6 +59,8 @@ const { userName } = userStore
 
 const drawer = ref<boolean>(false)
 const activeClock = ref<boolean>(false)
+const company = ref<string>('')
+const user = ref<string>('')
 // const snackBar = ref<boolean>(false)
 // const barMessage = ref<string>('')
 // const barColor = ref<string>('')
@@ -69,6 +71,11 @@ const menuEvent = async (event: string) => {
     console.log('signout')
   } 
 }
+
+onMounted(() => {
+  company.value = companyName
+  user.value = userName
+})
 
 // const barControl = (message?: string, color?: string) => {
 //   if (message) barMessage.value = message

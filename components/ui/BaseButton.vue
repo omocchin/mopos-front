@@ -8,6 +8,7 @@
     :height="height"
     :to="link"
     :style="style"
+    :disabled="disabled"
   >
     <slot></slot>
   </v-btn>
@@ -21,6 +22,7 @@
     @click="buttonAction"
     :style="style"
     :value="value"
+    :disabled="disabled"
   >
     <slot></slot>
   </v-btn>
@@ -33,6 +35,7 @@
     :width="width"
     :height="height"
     :style="style"
+    :disabled="disabled"
     nuxt
   >
     <slot></slot>
@@ -48,6 +51,7 @@ interface Props {
   link?: string
   style?: string
   value?: string | number
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -58,6 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   link: undefined,
   style: undefined,
   value: undefined,
+  disabled: false,
 })
 
 const emits = defineEmits(['action'])

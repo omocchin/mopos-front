@@ -23,12 +23,33 @@ interface UserLoginResponse {
   authority: number
 }
 
+interface UsersRequest {
+  page: number
+  per_page: number
+  keyword?: string
+  user_status?: string
+}
+
+interface Users {
+  id: number
+  first_name: string
+  last_name: string
+  user_number: number
+  authority: string
+  pay: number
+}
+
+interface UsersResponse {
+  current_page: number
+  total_pages: number
+  users: Users
+}
+
 const requestClockInOut = async (body: ClockInOutRequest) => {
   const { data, status, error } = await useApiFetch('v1/user/clock_in_out', {
     method: 'POST',
     body: body
-  }
-  )
+  })
   return [data, status, error]
 }
 
@@ -36,19 +57,36 @@ const requestUserLogin = async (body: UserLoginRequest) => {
   const { data, status, error } = await useApiFetch('v1/user_login', {
     method: 'POST',
     body: body
-  }
-  )
+  })
   return [data, status, error]
+}
+
+const requestUsers = async (page: number, perPage: number, keyword?: string, userStatus?: string) => {
+  const query: UsersRequest = {
+    page: page,
+    per_page: perPage,
+    keyword: keyword,
+    user_status: userStatus
+  }
+  const { data, status, error } = await useApiFetch('v1/users', {
+    method: 'GET',
+    query: query
+  })
+  return data
 }
 
 export {
   requestClockInOut,
-  requestUserLogin
+  requestUserLogin,
+  requestUsers,
 }
 
 export type {
   ClockInOutResponse,
   ClockInOutRequest,
   UserLoginRequest,
-  UserLoginResponse
+  UserLoginResponse,
+  UsersResponse,
+  UsersRequest,
+  Users,
 }
