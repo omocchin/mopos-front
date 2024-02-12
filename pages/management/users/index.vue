@@ -7,6 +7,7 @@
     page="page"
     :select-items="statuses"
     @search-action="searchUsers"
+    @action="createPage"
   >
     <users-table
       :headers="headers"
@@ -33,14 +34,19 @@ definePageMeta({
 })
 
 const theme = useTheme()
+const router = useRouter()
 const users = ref<Array<Users>>([])
 const page = ref<number | undefined>(undefined)
 const totalPages = ref<number>(0)
 const load = ref<boolean>(false)
 const headers = ref()
+const searchKeyword = ref<string>()
+const searchStatus = ref<string>()
 
 const getUsers = async (currentPage: number, keyword?: string, status?: string) => {
   load.value = true
+  searchKeyword.value = keyword
+  searchStatus.value = status
   await requestUsers(currentPage, ITEMS_PER_TABLE, keyword, status).then((data) => {
     users.value = data.value.users
     page.value = data.value.current_page
@@ -50,11 +56,15 @@ const getUsers = async (currentPage: number, keyword?: string, status?: string) 
 }
 
 const movePage = async (nextPage: number) => {
-  await getUsers(nextPage)
+  await getUsers(nextPage, searchKeyword.value, searchStatus.value)
 }
 
 const searchUsers = async (keyword: string, selectedStatus: string) => {
   await getUsers(1, keyword, selectedStatus)
+}
+
+const createPage = () => {
+  router.push({path: '/management/users/new'})
 }
 
 onMounted(async () => {

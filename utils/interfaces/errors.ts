@@ -3,6 +3,7 @@ interface ErrorResponse {
   data: {
     error: string
     message: string
+    model?: string
   }
 }
 

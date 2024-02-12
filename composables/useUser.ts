@@ -45,6 +45,19 @@ interface UsersResponse {
   users: Users
 }
 
+interface CreateUserRequest {
+  first_name: string
+  last_name: string
+  tel?: string
+  email?: string
+  authority: number
+  pay: number
+  user_number?: number
+  login_id: string
+  password: string
+  password_confirmation: string
+}
+
 const requestClockInOut = async (body: ClockInOutRequest) => {
   const { data, status, error } = await useApiFetch('v1/user/clock_in_out', {
     method: 'POST',
@@ -75,10 +88,19 @@ const requestUsers = async (page: number, perPage: number, keyword?: string, use
   return data
 }
 
+const requestCreateUser = async (body: CreateUserRequest) => {
+  const { data, status, error } = await useApiFetch('v1/user/create', {
+    method: 'POST',
+    body: body
+  })
+  return [data, status, error]
+}
+
 export {
   requestClockInOut,
   requestUserLogin,
   requestUsers,
+  requestCreateUser,
 }
 
 export type {
@@ -89,4 +111,5 @@ export type {
   UsersResponse,
   UsersRequest,
   Users,
+  CreateUserRequest,
 }

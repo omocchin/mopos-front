@@ -1,5 +1,3 @@
-
-import type { mapActions } from 'pinia';
 <template>
   <div class="d-flex flex-column pa-5 h-100">
     <div class="d-flex justify-space-between align-center mb-5">
@@ -47,7 +45,7 @@ import type { mapActions } from 'pinia';
             mode="action"
             height="100%"
             width="50%"
-            @action="searchAction(keyword, selected)"
+            @action="searchAction"
           >search</base-button>
         </div>
       </div>
@@ -89,7 +87,7 @@ const selected = ref<string>()
 const keyword = ref<string>()
 
 const action = (event: any) => {
-  emits('action', event.target.value)
+  emits('action')
 }
 
 const searchAction = () => {
