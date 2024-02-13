@@ -1,25 +1,22 @@
 <template>
-  <v-data-table
-    class="h-100"
-    :modelValue:page="page"
+  <base-data-table
+    custom-class="h-100"
+    :page="page"
     :headers="headers"
     :items="items"
+    :total-pages="totalPages"
     :items-per-page="ITEMS_PER_TABLE"
+    :row-click-event="true"
+    :row-select="true"
+    @row-click="rowClick"
+    @move-page="changePage"
+    @selected="rowSelected"
   >
-    <template v-slot:bottom>
-      <div class="text-center pt-2">
-        <v-pagination
-          v-if="items"
-          :modelValue="page"
-          :length="totalPages"
-          @update:modelValue="changePage($event)"
-        ></v-pagination>
-      </div>
-    </template>
-  </v-data-table>
+  </base-data-table>
 </template>
 
 <script setup lang="ts">
+import BaseDataTable from '~/components/ui/BaseDataTable.vue';
 import { ITEMS_PER_TABLE } from '~/utils/variables/global'
 
 interface Props {
@@ -36,9 +33,19 @@ const props = withDefaults(defineProps<Props>(), {
   totalPages: undefined
 })
 
-const emits = defineEmits(['movePage'])
+const emits = defineEmits(['movePage', 'rowEvent', 'selectedEvent'])
 
 const changePage = (event: any) => {
   emits('movePage', event)
 }
+
+const rowClick = (item: any) => {
+  emits('rowEvent', item)
+}
+
+const rowSelected = (items: any) => {
+  emits('selectedEvent', items)
+}
+
+
 </script>

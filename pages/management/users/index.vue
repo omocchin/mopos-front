@@ -14,7 +14,9 @@
       :items="users"
       :page="page"
       :totalPages="totalPages"
-      @movePage="movePage($event)"
+      @movePage="movePage"
+      @row-event="rowEvent"
+      @selected-event="selectedEvent"
     >
     </users-table>
   </table-base>
@@ -65,6 +67,14 @@ const searchUsers = async (keyword: string, selectedStatus: string) => {
 
 const createPage = () => {
   router.push({path: '/management/users/new'})
+}
+
+const rowEvent = (item: any) => {
+  console.log(item)
+}
+
+const selectedEvent = (items: any) => {
+  console.log(items)
 }
 
 onMounted(async () => {
