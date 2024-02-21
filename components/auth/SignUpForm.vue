@@ -135,7 +135,6 @@ const visible = ref<boolean>(false)
 const visibleConfirm = ref<boolean>(false)
 
 const createCompanyUser = async(formValues: any) => {
-  console.log(formValues)
   const [data, status, error] = await requestCreateCompanyUser({
     name: formValues.name,
     email: formValues.email,
@@ -147,8 +146,6 @@ const createCompanyUser = async(formValues: any) => {
   if (status.value === 'success') {
     emits('signUpComplete')
   } else {
-    console.log(status.value)
-    console.log(errorResponse.data.message)
     setFieldError('loginId', errorResponse.data.message)
   }
 }
