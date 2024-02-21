@@ -1,4 +1,5 @@
 const alOnly: RegExp = /^[a-zA-Z]+$/
+const alNum: RegExp = /^[a-zA-Z0-9]+$/
 const alNumSymOnly: RegExp = /^[a-zA-Z0-9!@#$%^&*.?]+$/
 const alNumSymSpaceOnly: RegExp = /^[a-zA-Z0-9!@#$%^&*.? ]+$/
 const numOnly: RegExp = /^\d+$/
@@ -10,6 +11,7 @@ const numDecimal: RegExp = /^\d+(\.\d{1,2})?$/
 
 export {
   alOnly,
+  alNum,
   alNumSymOnly,
   numOnly,
   containCapital,

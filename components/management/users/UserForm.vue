@@ -73,20 +73,22 @@
           icon-size="x-small"
         />
         <base-text-field
+          v-if="!editPage"
           v-model="password.value.value"
           :error-message="password.errorMessage.value"
           label="Password"
           type="password"
-          icon="mdi-asterisk"
+          :icon="editPage ? undefined : 'mdi-asterisk'"
           icon-color="red"
           icon-size="x-small"
         />
         <base-text-field
+          v-if="!editPage"
           v-model="passwordConfirmation.value.value"
           :error-message="passwordConfirmation.errorMessage.value"
           label="Password Confirmation"
           type="password"
-          icon="mdi-asterisk"
+          :icon="editPage ? undefined : 'mdi-asterisk'"
           icon-color="red"
           icon-size="x-small"
         />
@@ -97,7 +99,7 @@
       type="submit"
       color="accent"
     >
-      submit
+      {{ editPage ? 'EDIT USER' : 'CREATE USER'}}
     </v-btn>
   </form>
 </template>
@@ -107,22 +109,27 @@ import BaseCard from '~/components/ui/BaseCard.vue'
 import BaseTextField from '~/components/ui/BaseTextField.vue'
 import BaseSelect from '~/components/ui/BaseSelect.vue'
 import { useField, useForm } from 'vee-validate'
-import { alOnly, telFormat, emailFormat, numDecimal, numOnly, alNumSymOnly } from '~/utils/validations/regex'
+import { alOnly, alNum, telFormat, emailFormat, numDecimal, numOnly, alNumSymOnly } from '~/utils/validations/regex'
 import { authorities } from '~/utils/variables/management/authoritySelections'
 import { type ErrorResponse } from '~/utils/interfaces/errors'
 import { snakeToCamel } from '~/utils/functions/caseConversion'
+import { type GetUserResponse } from '#imports'
 
 interface Props {
   errorResponse: ErrorResponse
+  editPage: boolean
+  user?: GetUserResponse
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  errorResponse: undefined
+  errorResponse: undefined,
+  editPage: false,
+  user: undefined
 })
 
 const emits = defineEmits(['formSubmit'])
 
-const { handleSubmit, setFieldError } = useForm({
+const { handleSubmit, setFieldError, setFieldValue } = useForm({
   validationSchema: {
     firstName (value: string) {
       if (!value || value?.length == 0) {
@@ -182,7 +189,7 @@ const { handleSubmit, setFieldError } = useForm({
     loginId (value: string) {
       if (!value || value?.length == 0) {
         return 'Login ID is required'
-      } if (!alOnly.test(value)) {
+      } if (!alNum.test(value)) {
         return 'Alphabets only'
       } if (!/^.{5,}$/.test(value)) {
         return 'Enter 5 or more characters'
@@ -190,6 +197,9 @@ const { handleSubmit, setFieldError } = useForm({
       return true
     },
     password (value: string) {
+      if (props.editPage) {
+        return true
+      }
       if (!value || value?.length == 0) {
         return 'Password is required'
       } if (!alNumSymOnly.test(value)) {
@@ -200,6 +210,9 @@ const { handleSubmit, setFieldError } = useForm({
       return true
     },
     passwordConfirmation (value: string) {
+      if (props.editPage) {
+        return true
+      }
       if (!value || value?.length == 0) {
         return 'Password Confirmation is required'
       } if (password.value.value != value) {
@@ -207,7 +220,7 @@ const { handleSubmit, setFieldError } = useForm({
       }
       return true
     }
-  },
+  }
 })
 
 const firstName = useField('firstName')
@@ -222,22 +235,45 @@ const password = useField('password')
 const passwordConfirmation = useField('passwordConfirmation')
 
 const submit = handleSubmit(values => {
-  console.log('values', values)
-  const body = {
-    first_name: values.firstName.trim(),
-    last_name: values.lastName.trim(),
-    tel: values.tel?.trim(),
-    email: values.email?.trim(),
-    user_authority: values.authority,
-    pay: Number(values.pay.trim()),
-    user_number: Number(values.userNumber.trim()),
-    login_id: values.loginId.trim(),
-    password: values.password.trim(),
-    password_confirmation: values.passwordConfirmation.trim()
+  let body = null
+  if (props.editPage) {
+    body = {
+      first_name: values.firstName.trim(),
+      last_name: values.lastName.trim(),
+      tel: values.tel?.trim(),
+      email: values.email?.trim(),
+      user_authority: values.authority,
+      pay: Number(values.pay),
+      user_number: Number(values.userNumber),
+      login_id: values.loginId.trim(),
+    }
+  } else {
+    body = {
+      first_name: values.firstName.trim(),
+      last_name: values.lastName.trim(),
+      tel: values.tel?.trim(),
+      email: values.email?.trim(),
+      user_authority: values.authority,
+      pay: Number(values.pay),
+      user_number: Number(values.userNumber),
+      login_id: values.loginId.trim(),
+      password: values.password?.trim(),
+      password_confirmation: values.passwordConfirmation?.trim()
+    }
   }
-  console.log('body', body)
   emits('formSubmit', body)
 })
+
+const setInitialValues = (userInfo: GetUserResponse) => {
+  setFieldValue('firstName', userInfo.first_name)
+  setFieldValue('lastName', userInfo.last_name)
+  setFieldValue('tel', userInfo.tel)
+  setFieldValue('email', userInfo.email)
+  setFieldValue('authority', userInfo.user_authority_id)
+  setFieldValue('pay', userInfo.pay)
+  setFieldValue('userNumber', userInfo.user_number)
+  setFieldValue('loginId', userInfo.login_id)
+}
 
 watch(
   () => props.errorResponse,
@@ -247,6 +283,13 @@ watch(
       const model: string = value.data.model
       setFieldError(snakeToCamel(model), value.data.message)
     }
+  }
+)
+
+watch(
+  () => props.user,
+  (value: any) => {
+    setInitialValues(value)
   }
 )
 </script>

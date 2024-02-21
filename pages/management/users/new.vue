@@ -6,6 +6,7 @@
       </div>
       <user-form
         :error-response="errorResponse"
+        :edit-page="false"
         @form-submit="createUser"
       />
     </div>

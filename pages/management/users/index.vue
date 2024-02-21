@@ -69,8 +69,8 @@ const createPage = () => {
   router.push({path: '/management/users/new'})
 }
 
-const rowEvent = (item: any) => {
-  console.log(item)
+const rowEvent = (user: any) => {
+  router.push({path: `/management/users/${user.id}`})
 }
 
 const selectedEvent = (items: any) => {

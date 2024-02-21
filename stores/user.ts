@@ -71,7 +71,6 @@ export const useUserStore = defineStore('user', () => {
     const errorResponse: ErrorResponse = error.value
     if (status.value === 'success') {
       if (response.authority != 4) {
-        console.log(response)
         setUserToken(response.token)
         setUserName(response.name)
         setUserAuthority(response.authority)
