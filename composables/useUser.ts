@@ -70,6 +70,10 @@ interface GetUserResponse {
   status: string
 }
 
+interface DeleteUsersRequest {
+  ids: Array<number>
+}
+
 const requestClockInOut = async (body: ClockInOutRequest) => {
   const { data, status, error } = await useApiFetch('v1/user/clock_in_out', {
     method: 'POST',
@@ -123,6 +127,14 @@ const requestEditUser = async (userId: any, body: CreateUserRequest) => {
   return [data, status, error]
 }
 
+const requestDeleteUsers = async (body: DeleteUsersRequest) => {
+  const { data, status, error } = await useApiFetch('v1/users', {
+    method: 'DELETE',
+    body: body
+  })
+  return [data, status, error]
+}
+
 export {
   requestClockInOut,
   requestUserLogin,
@@ -130,6 +142,7 @@ export {
   requestCreateUser,
   requestGetUser,
   requestEditUser,
+  requestDeleteUsers,
 }
 
 export type {

@@ -1,13 +1,17 @@
 <template>
+  <base-snack-bar :model-value="snackBar" @close-bar="barControl" :message="barMessage" :color="barColor"/>
   <table-base
     title="USERS"
     actionButton="create user"
     searchTitle="user name ot user number"
     searchSelectTitle="status"
     page="page"
+    optional-action-button="delete user"
+    :optional-action-values="selectedIds"
     :select-items="statuses"
     @search-action="searchUsers"
     @action="createPage"
+    @optional-action="deleteUsers"
   >
     <users-table
       :headers="headers"
@@ -25,10 +29,11 @@
 <script setup lang="ts">
 import TableBase from '~/components/management/TableBase.vue';
 import UsersTable from '~/components/management/users/UsersTable.vue';
+import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { useTheme } from 'vuetify'
 import { userHeader } from '~/utils/variables/headers/usersHeaders'
 import { ITEMS_PER_TABLE } from '~/utils/variables/global'
-import { requestUsers, type Users} from '~/composables/useUser'
+import { requestUsers, requestDeleteUsers, type Users} from '~/composables/useUser'
 import { statuses } from '~/utils/variables/management/users'
 
 definePageMeta({
@@ -44,6 +49,10 @@ const load = ref<boolean>(false)
 const headers = ref()
 const searchKeyword = ref<string>()
 const searchStatus = ref<string>()
+const selectedIds = ref<Array<number> | any>()
+const snackBar = ref<boolean>(false)
+const barMessage = ref<string>('')
+const barColor = ref<string>('')
 
 const getUsers = async (currentPage: number, keyword?: string, status?: string) => {
   load.value = true
@@ -65,6 +74,23 @@ const searchUsers = async (keyword: string, selectedStatus: string) => {
   await getUsers(1, keyword, selectedStatus)
 }
 
+const barControl = (message?: string, color?: string) => {
+  if (message) barMessage.value = message
+  if (color) barColor.value = color
+  snackBar.value = !snackBar.value
+}
+
+const deleteUsers = async () => {
+  const [data, status, error] = await requestDeleteUsers({ids: selectedIds.value})
+  if (status.value === 'success') {
+    barControl('Successfully deleted users', 'success')
+    movePage(1)
+  } else {
+    console.log(error.value.data)
+    // errorResponse.value = error.value
+  }
+}
+
 const createPage = () => {
   router.push({path: '/management/users/new'})
 }
@@ -75,6 +101,7 @@ const rowEvent = (user: any) => {
 
 const selectedEvent = (items: any) => {
   console.log(items)
+  selectedIds.value = items
 }
 
 onMounted(async () => {

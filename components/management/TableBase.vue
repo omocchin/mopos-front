@@ -2,14 +2,28 @@
   <div class="d-flex flex-column pa-5 h-100">
     <div class="d-flex justify-space-between align-center mb-5">
       <p class="font-weight-bold text-h5">{{ title }}</p>
-      <base-button
-        v-if="actionButton"
-        class="text-h5"
-        height="100%"
-        mode="action"
-        color="accent"
-        @action="action"
-      >{{ actionButton }}</base-button>
+      <div>
+        <base-button
+          v-if="optionalActionValues.length > 0"
+          class="text-h5 mr-3"
+          height="100%"
+          mode="action"
+          color="accent"
+          @action="optionalAction"
+        >
+          {{ optionalActionButton }}
+        </base-button>
+        <base-button
+          v-if="actionButton"
+          class="text-h5"
+          height="100%"
+          mode="action"
+          color="accent"
+          @action="action"
+        >
+          {{ actionButton }}
+        </base-button>
+      </div>
     </div>
     <base-card
       width="100%"
@@ -71,6 +85,8 @@ interface Props {
   searchTitle?: string | null
   searchSelectTitle?: string | null
   selectItems?: Array<string>
+  optionalActionButton?: string | null
+  optionalActionValues?: Array<number> | any
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -78,16 +94,22 @@ const props = withDefaults(defineProps<Props>(), {
   actionButton: null,
   searchTitle: null,
   searchSelectTitle: null,
-  selectItems: undefined
+  selectItems: undefined,
+  optionalActionButton: null,
+  optionalActionValues: []
 })
 
-const emits = defineEmits(['action', 'searchAction'])
+const emits = defineEmits(['action', 'optionalAction', 'searchAction'])
 
 const selected = ref<string>()
 const keyword = ref<string>()
 
 const action = (event: any) => {
   emits('action')
+}
+
+const optionalAction = (event: any) => {
+  emits('optionalAction')
 }
 
 const searchAction = () => {
