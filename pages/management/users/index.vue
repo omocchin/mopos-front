@@ -1,5 +1,13 @@
 <template>
   <base-snack-bar :model-value="snackBar" @close-bar="barControl" :message="barMessage" :color="barColor"/>
+  <base-dialog
+    :dialog="dialog"
+    title="CAUTION"
+    body="The selected users will be deleted. Are you sure you want to proceed?"
+    action-text="DELETE"
+    @close="dialog = false"
+    @action="deleteUsers"
+  />
   <table-base
     title="USERS"
     actionButton="create user"
@@ -11,7 +19,7 @@
     :select-items="statuses"
     @search-action="searchUsers"
     @action="createPage"
-    @optional-action="deleteUsers"
+    @optional-action="dialog = true"
   >
     <users-table
       :headers="headers"
@@ -30,6 +38,7 @@
 import TableBase from '~/components/management/TableBase.vue';
 import UsersTable from '~/components/management/users/UsersTable.vue';
 import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
+import BaseDialog from '~/components/ui/BaseDialog.vue';
 import { useTheme } from 'vuetify'
 import { userHeader } from '~/utils/variables/headers/usersHeaders'
 import { ITEMS_PER_TABLE } from '~/utils/variables/global'
@@ -54,6 +63,7 @@ const selectedIds = ref<Array<number> | any>()
 const snackBar = ref<boolean>(false)
 const barMessage = ref<string>('')
 const barColor = ref<string>('')
+const dialog = ref<boolean>(false)
 
 const getUsers = async (currentPage: number, keyword?: string, status?: string) => {
   load.value = true
@@ -82,6 +92,7 @@ const barControl = (message?: string, color?: string) => {
 }
 
 const deleteUsers = async () => {
+  dialog.value = false
   const [data, status, error] = await requestDeleteUsers({ids: selectedIds.value})
   if (status.value === 'success') {
     barControl('Successfully deleted users', 'success')
