@@ -23,6 +23,7 @@ definePageMeta({
 })
 
 const theme = useTheme()
+const router = useRouter()
 
 onMounted(async () => {
   theme.global.name.value = 'myCustomDarkTheme'
@@ -33,7 +34,7 @@ const errorResponse = ref<any>()
 const createUser = async (body: any) => {
   const [data, status, error] = await requestCreateUser(body)
   if (status.value === 'success') {
-    console.log('success')
+    router.push({path: `/management/users`, query: {newUser: 'true'}})
   } else {
     errorResponse.value = error.value
   }

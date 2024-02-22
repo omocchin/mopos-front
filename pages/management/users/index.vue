@@ -41,6 +41,7 @@ definePageMeta({
 })
 
 const theme = useTheme()
+const route = useRoute()
 const router = useRouter()
 const users = ref<Array<Users>>([])
 const page = ref<number | undefined>(undefined)
@@ -105,6 +106,9 @@ const selectedEvent = (items: any) => {
 }
 
 onMounted(async () => {
+  if (route.query.newUser === 'true') {
+    barControl('Successfully created user', 'success')
+  }
   theme.global.name.value = 'myCustomDarkTheme'
   headers.value = userHeader
   nextTick(async () => {
