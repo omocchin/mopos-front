@@ -28,6 +28,7 @@ const myCustomDarkTheme: ThemeDefinition = {
     primary: '#282828',
     secondary: '#3f3f3f',
     accent: '#f4988b',
+    accentBlue: '#157FEF',
     backred: '#D55454',
     clearyellow: '#E6AE45',
     error: '#B00020',

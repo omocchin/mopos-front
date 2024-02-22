@@ -13,7 +13,7 @@ interface ClockInOutResponse {
 }
 
 interface UserLoginRequest {
-  user_number: string
+  login_id: string
   password: string
 }
 

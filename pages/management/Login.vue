@@ -2,8 +2,8 @@
   <auth-base title="USER LOGIN">
     <form @submit.prevent>
       <custom-input
-        label="User Number"
-        v-model="userNumber"
+        label="User Login ID"
+        v-model="loginId"
       />
       <custom-input
         label="Password"
@@ -38,7 +38,7 @@ const store = useUserStore()
 const {userLogin} = store
 const router = useRouter()
 
-const userNumber = ref()
+const loginId = ref()
 const password = ref()
 
 const error = ref(false)
@@ -51,7 +51,7 @@ const setError = (show: boolean, message: string) => {
 
 const login = async () => {
   await userLogin({
-    user_number: userNumber.value,
+    login_id: loginId.value,
     password: password.value
   }).then((data) => {
     setError(false, '')

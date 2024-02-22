@@ -8,7 +8,7 @@
           class="text-h5 mr-3"
           height="100%"
           mode="action"
-          color="accent"
+          color="accentBlue"
           @action="optionalAction"
         >
           {{ optionalActionButton }}
