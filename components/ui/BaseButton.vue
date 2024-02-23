@@ -40,6 +40,14 @@
   >
     <slot></slot>
   </v-btn>
+  <v-btn
+    v-else-if="mode == 'icon'"
+    :class="customClass"
+    density="comfortable"
+    :icon="icon"
+    :to="link"
+  >
+  </v-btn>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +60,8 @@ interface Props {
   style?: string
   value?: string | number
   disabled?: boolean
+  icon?: string
+  customClass?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -63,6 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
   style: undefined,
   value: undefined,
   disabled: false,
+  icon: undefined,
+  customClass: undefined,
 })
 
 const emits = defineEmits(['action'])

@@ -1,7 +1,10 @@
 <template>
   <div class="d-flex flex-column pa-5 h-100">
     <div class="d-flex justify-space-between align-center mb-5">
-      <p class="font-weight-bold text-h5">{{ title }}</p>
+      <div class="d-flex align-center">
+        <base-button customClass="mr-3" mode="icon" icon="mdi-arrow-left" link="/management/home"/>
+        <p class="font-weight-bold text-h5">{{ title }}</p>
+      </div>
       <div>
         <base-button
           v-if="optionalActionValues.length > 0"
