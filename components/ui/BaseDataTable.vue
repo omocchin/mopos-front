@@ -14,6 +14,7 @@
       <div class="text-center pt-2">
         <v-pagination
           v-if="items"
+          total-visible="6"
           :modelValue="page"
           :length="totalPages"
           @update:modelValue="changePage($event)"

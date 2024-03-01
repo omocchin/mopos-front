@@ -42,9 +42,9 @@ const menuItems = [
   },
   {
     mode: 'to',
-    title: 'HISTORY',
-    link: '/auth/login',
-    disabled: true
+    title: 'PRODUCTS',
+    link: '/management/products',
+    disabled: false
   },
   {
     mode: 'action',

@@ -14,7 +14,7 @@
   </v-btn>
   <v-btn
     v-else-if="mode == 'action'"
-    class="pa-3"
+    :class="'pa-3 ' + customClass"
     :color="color || 'accent'"
     elevation="16"
     :width="width"
@@ -41,12 +41,22 @@
     <slot></slot>
   </v-btn>
   <v-btn
-    v-else-if="mode == 'icon'"
+    v-else-if="mode == 'icon-link'"
     :class="customClass"
     density="comfortable"
     :icon="icon"
     :to="link"
+    @click="buttonAction"
   >
+  </v-btn>
+  <v-btn
+    v-else-if="mode == 'icon-action'"
+    :class="customClass"
+    density="comfortable"
+    :prepend-icon="icon"
+    @click="buttonAction"
+  >
+    <slot></slot>
   </v-btn>
 </template>
 

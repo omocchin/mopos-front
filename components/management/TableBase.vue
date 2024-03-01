@@ -2,7 +2,7 @@
   <div class="d-flex flex-column pa-5 h-100">
     <div class="d-flex justify-space-between align-center mb-5">
       <div class="d-flex align-center">
-        <base-button customClass="mr-3" mode="icon" icon="mdi-arrow-left" link="/management/home"/>
+        <base-button customClass="mr-3" mode="icon-link" icon="mdi-arrow-left" link="/management/home"/>
         <p class="font-weight-bold text-h5">{{ title }}</p>
       </div>
       <div>
@@ -18,8 +18,7 @@
         </base-button>
         <base-button
           v-if="actionButton"
-          class="text-h5"
-          height="100%"
+          custom-class="text-h5 h-100"
           mode="action"
           color="accent"
           @action="action"
@@ -48,7 +47,18 @@
         </div>
         <div class="w-25">
           <v-select
-            v-if="searchSelectTitle"
+            v-if="searchSelectChip"
+            v-model="selected"
+            :items="selectItems"
+            item-title="name"
+            item-value="id"
+            chips
+            :label="searchSelectTitle"
+            multiple
+            :hide-details="true"
+          ></v-select>
+          <v-select
+            v-else
             v-model="selected"
             :label="searchSelectTitle"
             :items="selectItems"
@@ -86,8 +96,9 @@ interface Props {
   title: string
   actionButton: string | null
   searchTitle?: string | null
-  searchSelectTitle?: string | null
-  selectItems?: Array<string>
+  searchSelectTitle?: string | undefined
+  searchSelectChip?: boolean
+  selectItems?: Array<string> | any
   optionalActionButton?: string | null
   optionalActionValues?: Array<number> | any
 }
@@ -96,7 +107,8 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   actionButton: null,
   searchTitle: null,
-  searchSelectTitle: null,
+  searchSelectTitle: undefined,
+  searchSelectChip: false,
   selectItems: undefined,
   optionalActionButton: null,
   optionalActionValues: []
