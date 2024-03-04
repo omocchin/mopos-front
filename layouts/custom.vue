@@ -55,6 +55,7 @@ import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { ref } from 'vue';
 import { drawerItems } from '~/utils/variables/navBarItems';
 import { useAuthStore } from '~/stores/auth'
+import { requestCompanyTokenAuth } from '~/composables/useAuth'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -95,6 +96,15 @@ const closeClock = (event: ClockInOutResponse) =>{
     barControl()
   }
 }
+
+onBeforeMount(async () => {
+  await nextTick(async () => {
+    const companyStatus = await requestCompanyTokenAuth()
+    if (companyStatus.value === 'error') {
+      router.push({path: '/auth/login'})
+    }
+  })
+})
 
 onMounted(() => {
   selectedUser.value =  activeUsers.find(({user_number}) => user_number == currentUser)?.user_number

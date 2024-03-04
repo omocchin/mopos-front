@@ -28,9 +28,25 @@ const requestCompanyLogout = async () => {
   return [data, status, error]
 }
 
+const requestCompanyTokenAuth = async () => {
+  const { data, status, error } = await useApiFetch('v1/company_user/authenticate', {
+    method: 'GET',
+  })
+  return status
+}
+
+const requestUserTokenAuth = async () => {
+  const { data, status, error } = await useApiFetch('v1/user/authenticate', {
+    method: 'GET',
+  })
+  return status
+}
+
 export {
   requestCompanyLogin,
-  requestCompanyLogout
+  requestCompanyLogout,
+  requestCompanyTokenAuth,
+  requestUserTokenAuth
 };
 export type {
   CompanyLoginResponse

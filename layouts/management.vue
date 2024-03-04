@@ -50,12 +50,14 @@
 // import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { ref } from 'vue';
 import { managementItems } from '~/utils/variables/managementItems';
+import { requestCompanyTokenAuth, requestUserTokenAuth } from '~/composables/useAuth'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
 // const router = useRouter()
 const { companyName } = authStore
 const { userName } = userStore
+const router = useRouter()
 
 const drawer = ref<boolean>(false)
 const activeClock = ref<boolean>(false)
@@ -71,6 +73,19 @@ const menuEvent = async (event: string) => {
     console.log('signout')
   } 
 }
+
+onBeforeMount(async () => {
+  await nextTick(async () => {
+    const companyStatus = await requestCompanyTokenAuth()
+    if (companyStatus.value === 'error') {
+      router.push({path: '/auth/login'})
+    }
+    const userStatus = await requestUserTokenAuth()
+    if (userStatus.value === 'error') {
+      router.push({path: '/management/auth/login'})
+    }
+  })
+})
 
 onMounted(() => {
   company.value = companyName
