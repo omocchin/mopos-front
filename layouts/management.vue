@@ -1,6 +1,15 @@
 <template>
   <!-- <base-snack-bar :model-value="snackBar" @close-bar="barControl" :message="barMessage" :color="barColor"/>
   <clock-modal v-if="activeClock" @close="closeClock"/> -->
+  <base-dialog
+    :dialog="dialog"
+    :title="dialogTitle"
+    :body="dialogBody"
+    action-text="RE-LOGIN"
+    :closable="false"
+    @close="dialog = false"
+    @action="toLogin"
+  />
   <v-layout>
     <v-app-bar rounded color="secondary" density="comfortable">
       <v-app-bar-nav-icon icon="$menu" @click.stop="drawer = !drawer" />
@@ -48,6 +57,7 @@
 <script setup lang="ts">
 // import ClockModal from '~/components/home/ClockModal.vue';
 // import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
+import BaseDialog from '~/components/ui/BaseDialog.vue';
 import { ref } from 'vue';
 import { managementItems } from '~/utils/variables/managementItems';
 import { requestCompanyTokenAuth, requestUserTokenAuth } from '~/composables/useAuth'
@@ -63,6 +73,11 @@ const drawer = ref<boolean>(false)
 const activeClock = ref<boolean>(false)
 const company = ref<string>('')
 const user = ref<string>('')
+const dialog = ref<boolean>(false)
+const dialogTitle = ref<string>('')
+const dialogBody = ref<string>('')
+const dialogRoute = ref<string>('')
+
 // const snackBar = ref<boolean>(false)
 // const barMessage = ref<string>('')
 // const barColor = ref<string>('')
@@ -71,18 +86,38 @@ const user = ref<string>('')
 const menuEvent = async (event: string) => {
   if (event === 'signout') {
     console.log('signout')
-  } 
+  }
+}
+
+const setDialog = (title: string, body: string, route: string) => {
+  dialog.value = true
+  dialogTitle.value = title
+  dialogBody.value = body
+  dialogRoute.value = route
+}
+
+const toLogin = () => {
+  router.push({path: dialogRoute.value})
 }
 
 onBeforeMount(async () => {
   await nextTick(async () => {
     const companyStatus = await requestCompanyTokenAuth()
     if (companyStatus.value === 'error') {
-      router.push({path: '/auth/login'})
+      setDialog(
+        'COMPANY USER SESSION EXPIRED',
+        'Your company user seesion has expired due expiration of the token. Please re-login to continue.',
+        '/auth/login'
+      )
     }
     const userStatus = await requestUserTokenAuth()
     if (userStatus.value === 'error') {
-      router.push({path: '/management/auth/login'})
+      setDialog(
+        'MANAGEMENT USER SESSION EXPIRED',
+        'Your managemant user seesion has expired due expiration of the token. Please re-login to continue.',
+        '/management/auth/login'
+      )
+      // router.push({path: '/management/auth/login'})
     }
   })
 })
