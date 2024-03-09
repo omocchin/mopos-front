@@ -2,6 +2,7 @@
   <v-dialog
     :model-value="dialog"
     width="auto"
+    :persistent="!closable"
   >
     <base-card>
       <v-card-title class="d-flex justify-center font-weight-bold text-clearyellow w-100">
@@ -12,7 +13,7 @@
       </v-card-text>
       <v-card-actions>
         <div class="d-flex justify-center text-subtitle-1 w-100">
-          <base-button mode="action" @action="emits('close')" color="accent" width="25%">
+          <base-button v-if="closable" mode="action" @action="emits('close')" color="accent" width="25%">
             CLOSE
           </base-button>
           <base-button mode="action" @action="emits('action')" color="accentBlue" width="25%">
@@ -33,6 +34,7 @@ interface Props {
   title: string
   body: string
   actionText: string
+  closable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -40,6 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   body: '',
   actionText: '',
+  closable: true,
 })
 
 const emits = defineEmits(['close', 'action'])

@@ -65,7 +65,7 @@ const menuEvent = (targetAction: string) => {
     clockInOut.value = true
   } else if (targetAction === 'management') {
     // theme.global.name.value = 'myCustomDarkTheme'
-    router.push({path: '/management/login'})
+    router.push({path: '/management/auth/login'})
   }
 }
 

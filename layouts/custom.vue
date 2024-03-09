@@ -1,6 +1,15 @@
 <template>
   <base-snack-bar :model-value="snackBar" @close-bar="barControl" :message="barMessage" :color="barColor"/>
   <clock-modal v-if="activeClock" @close="closeClock"/>
+  <base-dialog
+    :dialog="dialog"
+    title="SESSION EXPIRED"
+    body="Your company user seesion has expired due expiration of the token.\n Please re-login to continue."
+    action-text="LOGIN"
+    :closable="false"
+    @close="dialog = false"
+    @action="router.push({path: '/auth/login'})"
+  />
   <v-layout>
     <v-app-bar rounded color="secondary" density="comfortable">
       <v-app-bar-nav-icon icon="$menu" @click.stop="drawer = !drawer" />
@@ -52,9 +61,11 @@
 <script setup lang="ts">
 import ClockModal from '~/components/home/ClockModal.vue';
 import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
+import BaseDialog from '~/components/ui/BaseDialog.vue';
 import { ref } from 'vue';
 import { drawerItems } from '~/utils/variables/navBarItems';
 import { useAuthStore } from '~/stores/auth'
+import { requestCompanyTokenAuth } from '~/composables/useAuth'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -69,6 +80,7 @@ const snackBar = ref<boolean>(false)
 const barMessage = ref<string>('')
 const barColor = ref<string>('')
 const company = ref<string>('')
+const dialog = ref<boolean>(false)
 
 const menuEvent = async (event: string) => {
   if (event === 'clockInOut') {
@@ -95,6 +107,15 @@ const closeClock = (event: ClockInOutResponse) =>{
     barControl()
   }
 }
+
+onBeforeMount(async () => {
+  await nextTick(async () => {
+    const companyStatus = await requestCompanyTokenAuth()
+    if (companyStatus.value === 'error') {
+      dialog.value = true
+    }
+  })
+})
 
 onMounted(() => {
   selectedUser.value =  activeUsers.find(({user_number}) => user_number == currentUser)?.user_number
