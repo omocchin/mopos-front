@@ -84,12 +84,29 @@ const requestCreateProuct = async (body: CreateProductRequest) => {
   return [data, status, error]
 }
 
+const requestProduct = async (productId: any) => {
+  const { data, status, error } = await useApiFetch(`v1/item/${productId}`, {
+    method: 'GET'
+  })
+  return [data, status, error]
+}
+
+const requestEditProduct = async (productId: any, body: CreateProductRequest) => {
+  const { data, status, error } = await useApiFetch(`v1/item/${productId}`, {
+    method: 'PUT',
+    body: body
+  })
+  return [data, status, error]
+}
+
 export {
   requestProductategories,
   requestProducts,
   requestDeleteProducts,
   requestGenerateProuctCode,
-  requestCreateProuct
+  requestCreateProuct,
+  requestProduct,
+  requestEditProduct
 }
 
 export type {

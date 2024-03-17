@@ -128,21 +128,21 @@ import { alOnly, alNum, telFormat, emailFormat, numDecimal, numOnly, alNumSymOnl
 import { authorities } from '~/utils/variables/management/authoritySelections'
 import { type ErrorResponse } from '~/utils/interfaces/errors'
 import { snakeToCamel } from '~/utils/functions/caseConversion'
-import { type GetUserResponse } from '#imports'
+import { type Products } from '#imports'
 import { requestGenerateProuctCode, type CreateProductRequest } from '~/composables/useProduct'
 
 interface Props {
   errorResponse: ErrorResponse
   editPage: boolean
   categorySelection: any
-  user?: GetUserResponse
+  product?: GetUserResponse
 }
 
 const props = withDefaults(defineProps<Props>(), {
   errorResponse: undefined,
   editPage: false,
   categorySelection: undefined,
-  user: undefined
+  product: undefined
 })
 
 const emits = defineEmits(['formSubmit'])
@@ -234,16 +234,13 @@ const generateProductCode = async () => {
   setFieldValue('productCode', data.value.item_code)
 }
 
-// const setInitialValues = (userInfo: GetUserResponse) => {
-//   setFieldValue('firstName', userInfo.first_name)
-//   setFieldValue('lastName', userInfo.last_name)
-//   setFieldValue('tel', userInfo.tel)
-//   setFieldValue('email', userInfo.email)
-//   setFieldValue('authority', userInfo.user_authority_id)
-//   setFieldValue('pay', userInfo.pay)
-//   setFieldValue('userNumber', userInfo.user_number)
-//   setFieldValue('loginId', userInfo.login_id)
-// }
+const setInitialValues = (productInfo: Products) => {
+  setFieldValue('name', productInfo.name)
+  setFieldValue('category', productInfo.category_name)
+  setFieldValue('productCode', productInfo.item_code)
+  setFieldValue('price', productInfo.price)
+  setFieldValue('quantity', productInfo.quantity)
+}
 
 watch(
   () => props.errorResponse,
@@ -256,10 +253,10 @@ watch(
   }
 )
 
-// watch(
-//   () => props.user,
-//   (value: any) => {
-//     setInitialValues(value)
-//   }
-// )
+watch(
+  () => props.product,
+  (value: any) => {
+    setInitialValues(value)
+  }
+)
 </script>
