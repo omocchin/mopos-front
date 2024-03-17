@@ -40,7 +40,7 @@ import UsersTable from '~/components/management/users/UsersTable.vue';
 import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import BaseDialog from '~/components/ui/BaseDialog.vue';
 import { useTheme } from 'vuetify'
-import { userHeader } from '~/utils/variables/headers/usersHeaders'
+import { userHeader } from '~/utils/variables/headers/headers'
 import { ITEMS_PER_TABLE } from '~/utils/variables/global'
 import { requestUsers, requestDeleteUsers, type Users} from '~/composables/useUser'
 import { statuses } from '~/utils/variables/management/users'

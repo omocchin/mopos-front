@@ -135,6 +135,13 @@ const requestDeleteUsers = async (body: DeleteUsersRequest) => {
   return [data, status, error]
 }
 
+const requestUserLogout = async () => {
+  const { data, status, error } = await useApiFetch('v1/logout', {
+    method: 'POST',
+  })
+  return [data, status, error]
+}
+
 export {
   requestClockInOut,
   requestUserLogin,
@@ -143,6 +150,7 @@ export {
   requestGetUser,
   requestEditUser,
   requestDeleteUsers,
+  requestUserLogout
 }
 
 export type {

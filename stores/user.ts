@@ -1,6 +1,7 @@
 import {
   requestClockInOut,
   requestUserLogin,
+  requestUserLogout,
   type ClockInOutResponse,
   type ClockInOutRequest,
   type UserLoginRequest,
@@ -32,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
     userName.value = name
   }
 
-  const setUserAuthority = (authority: number) => {
+  const setUserAuthority = (authority: number | null) => {
     userAuthority.value = authority
   }
   
@@ -83,6 +84,18 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const userLogout = async () => {
+    const [data, status, error] = await requestUserLogout()
+    if (status.value === 'success') {
+      setUserToken('')
+      setUserName('')
+      setUserAuthority(null)
+      return true
+    } else {
+      return false
+    }
+  }
+
   return {
     addActiveUser,
     activeUsers,
@@ -94,7 +107,8 @@ export const useUserStore = defineStore('user', () => {
     setCurrentUser,
     emptyActiveUser,
     removeCurrentUser,
-    userLogin
+    userLogin,
+    userLogout
   }
 },
 {

@@ -13,7 +13,7 @@
   <v-layout>
     <v-app-bar rounded color="secondary" density="comfortable">
       <v-app-bar-nav-icon icon="$menu" @click.stop="drawer = !drawer" />
-      <v-app-bar-title>MiPOS</v-app-bar-title>
+      <v-btn class="text-h5 text-accent" to="/management/home" variant="plain">MOPOS</v-btn>
       <v-spacer/>
       <v-input
         class="company-user-selector"
@@ -55,22 +55,19 @@
 </template>
 
 <script setup lang="ts">
-// import ClockModal from '~/components/home/ClockModal.vue';
-// import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import BaseDialog from '~/components/ui/BaseDialog.vue';
 import { ref } from 'vue';
 import { managementItems } from '~/utils/variables/managementItems';
 import { requestCompanyTokenAuth, requestUserTokenAuth } from '~/composables/useAuth'
+import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
-// const router = useRouter()
 const { companyName } = authStore
-const { userName } = userStore
+const { userName, userLogout } = userStore
 const router = useRouter()
 
 const drawer = ref<boolean>(false)
-const activeClock = ref<boolean>(false)
 const company = ref<string>('')
 const user = ref<string>('')
 const dialog = ref<boolean>(false)
@@ -78,14 +75,12 @@ const dialogTitle = ref<string>('')
 const dialogBody = ref<string>('')
 const dialogRoute = ref<string>('')
 
-// const snackBar = ref<boolean>(false)
-// const barMessage = ref<string>('')
-// const barColor = ref<string>('')
-// const company = ref<string>('')
-
 const menuEvent = async (event: string) => {
   if (event === 'signout') {
-    console.log('signout')
+    const result = await userLogout()
+    if (result) {
+      router.push({path: '/home'})
+    }
   }
 }
 
@@ -126,38 +121,6 @@ onMounted(() => {
   company.value = companyName
   user.value = userName
 })
-
-// const barControl = (message?: string, color?: string) => {
-//   if (message) barMessage.value = message
-//   if (color) barColor.value = color
-//   snackBar.value = !snackBar.value
-// }
-
-// const closeClock = (event: ClockInOutResponse) =>{
-//   activeClock.value = !activeClock.value
-//   if (event.status === 'clocked_in') {
-//     barControl(`Hello ${event.first_name}, have a nice shift.`, 'clockin')
-//   } else if (event.status === 'clocked_out') {
-//     barControl(`Bye ${event.first_name}, please go home safe.`, 'clockout')
-//   } else {
-//     barControl()
-//   }
-// }
-
-// onMounted(() => {
-//   selectedUser.value =  activeUsers.find(({user_number}) => user_number == currentUser)?.user_number
-//   company.value = companyName
-// })
-
-// watch(selectedUser, (newValue) => {
-//   setCurrentUser(newValue === '' ? null : selectedUser.value)
-// })
-
-// watch(activeUsers, (newValue) => {
-//   if (newValue.length == 0) {
-//     selectedUser.value = ''
-//   }
-// })
 </script>
 
 <style scoped>

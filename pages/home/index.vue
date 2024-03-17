@@ -85,4 +85,8 @@ const closeClock = (event: ClockInOutResponse) =>{
     return
   }
 }
+
+onMounted(() => {
+  theme.global.name.value = 'myCustomLightTheme'
+})
 </script>

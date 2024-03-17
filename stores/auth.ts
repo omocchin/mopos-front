@@ -1,4 +1,4 @@
-import { requestCompanyLogin, requestCompanyLogout, type CompanyLoginResponse } from "#imports"
+import { requestCompanyLogin, requestCompanyLogout, requestUserLogout, type CompanyLoginResponse } from "#imports"
 import { CustomError } from "~/utils/classes/customs"
 import { type ErrorResponse } from "~/utils/interfaces/errors"
 // import { useUserStore } from '~/stores/user'
@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
     setCompanyName,
     companyLogin,
     setUser,
-    companyLogout
+    companyLogout,
   }
 },
 {

@@ -1,15 +1,21 @@
 const managementItems = [
   {
-    title: 'USERS',
+    title: 'HOME',
     action: 'url',
-    url: '/management/users',
-    icon: 'mdi-account'
+    url: '/management/home',
+    icon: 'mdi-home'
   },
   {
     title: 'USERS',
     action: 'url',
     url: '/management/users',
     icon: 'mdi-account'
+  },
+  {
+    title: 'PRODUCTS',
+    action: 'url',
+    url: '/management/products',
+    icon: 'mdi-package'
   },
   {
     title: 'USERS',

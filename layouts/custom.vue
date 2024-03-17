@@ -13,7 +13,7 @@
   <v-layout>
     <v-app-bar rounded color="secondary" density="comfortable">
       <v-app-bar-nav-icon icon="$menu" @click.stop="drawer = !drawer" />
-      <v-app-bar-title>MiPOS</v-app-bar-title>
+      <v-btn class="text-h5 text-accent" to="/home" variant="plain">MOPOS</v-btn>
       <v-spacer/>
       <v-input
         class="company-user-selector"
