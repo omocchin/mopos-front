@@ -36,6 +36,10 @@ export default defineNuxtConfig({
       template: {
         transformAssetUrls,
       },
+      script: {
+        defineModel: true,
+        propsDestructure: true
+      },
     },
   },
   nitro: {

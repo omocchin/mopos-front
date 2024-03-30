@@ -98,7 +98,6 @@ const deleteUsers = async () => {
     barControl('Successfully deleted users', 'success')
     movePage(1)
   } else {
-    console.log(error.value.data)
     // errorResponse.value = error.value
   }
 }
@@ -112,7 +111,6 @@ const rowEvent = (user: any) => {
 }
 
 const selectedEvent = (items: any) => {
-  console.log(items)
   selectedIds.value = items
 }
 

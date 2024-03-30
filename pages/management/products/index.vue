@@ -73,7 +73,6 @@ const getProducts = async (currentPage: number, keyword?: string, itemCategories
   searchItemCategories.value = itemCategories
   const [data, status, error] = await requestProducts(currentPage, ITEMS_PER_TABLE, keyword, itemCategories?.toString())
   if (status.value === 'success') {
-    console.log(data.value)
     poducts.value = data.value.items
     page.value = data.value.current_page
     totalPages.value = data.value.total_pages
@@ -83,7 +82,6 @@ const getProducts = async (currentPage: number, keyword?: string, itemCategories
 
 const getProductSelections = async () => {
   const [data, status, error] = await requestProductategories()
-  console.log(data.value)
   categorySelections.value = data.value
 }
 
@@ -92,7 +90,6 @@ const movePage = async (nextPage: number) => {
 }
 
 const searchProducts = async (keyword: string, selectedCategories: Array<number>) => {
-  console.log(selectedCategories)
   await getProducts(1, keyword, selectedCategories)
 }
 
@@ -109,7 +106,6 @@ const deleteProducts = async () => {
     barControl('Successfully deleted products', 'success')
     movePage(1)
   } else {
-    console.log(error.value.data)
     // errorResponse.value = error.value
   }
 }

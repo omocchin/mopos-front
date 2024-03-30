@@ -68,7 +68,7 @@ interface Props {
   mode: string
   link?: string
   style?: string
-  value?: string | number
+  value?: any
   disabled?: boolean
   icon?: string
   customClass?: string
@@ -90,6 +90,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(['action'])
 
 const buttonAction = (event: any) => {
-  emits('action', event.target.value)
+  emits('action', event.currentTarget.value)
 }
 </script>

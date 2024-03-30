@@ -30,7 +30,7 @@ const menuItems = [
   {
     mode: 'to',
     title: 'CASHIER',
-    link: '/auth/login'
+    link: '/cashier'
   },
   {
     mode: 'to',

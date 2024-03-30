@@ -76,7 +76,6 @@ const requestGenerateProuctCode = async () => {
 }
 
 const requestCreateProuct = async (body: CreateProductRequest) => {
-  console.log(body)
   const { data, status, error } = await useApiFetch('v1/item', {
     method: 'POST',
     body: body

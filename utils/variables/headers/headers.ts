@@ -1,3 +1,6 @@
+import { productMultiplication } from "~/utils/functions/calculation"
+import { type CartProduct } from "#imports"
+
 const userHeader = [
   {
     align: 'start',
@@ -22,7 +25,32 @@ const productHeader = [
   { title: 'Quantity', key: 'quantity' },
 ]
 
+const cashierHeader: Array<object> | undefined = [
+  {
+    align: 'start',
+    key: 'name',
+    title: 'item',
+    width: '60%',
+    sortable: false,
+    maxWidth: '60%'
+  },
+  {
+    title: 'qty',
+    key: 'buy_quantity',
+    width: '10%',
+    sortable: false
+  },
+  {
+    title: 'total',
+    key: 'total',
+    value: (item: CartProduct) => productMultiplication(item.price, item.buy_quantity),
+    width: '30%',
+    sortable: false
+  },
+]
+
 export {
   userHeader,
-  productHeader
+  productHeader,
+  cashierHeader
 }

@@ -2,8 +2,8 @@ import { useFetch } from "nuxt/app"
 
 const useApiFetch = async (path: any, opts: any) => {
   const config = useRuntimeConfig()
-  const companyToken = JSON.parse(localStorage.getItem("auth") || "").token
-  const userToken = JSON.parse(localStorage.getItem("user") || "").userToken
+  const companyToken = JSON.parse(localStorage.getItem("auth") || '{}').token
+  const userToken = JSON.parse(localStorage.getItem("user") || '{}').userToken
   return await useFetch(path, {
     baseURL: config.public.baseUrl,
     headers: {

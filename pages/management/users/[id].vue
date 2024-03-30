@@ -67,7 +67,6 @@ const barControl = (message?: string, color?: string) => {
 onMounted(async () => {
   theme.global.name.value = 'myCustomDarkTheme'
   userId.value = route.params.id
-  console.log(userId.value)
   nextTick(async () => {
     await getUser(userId.value)
   })

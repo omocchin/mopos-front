@@ -2,7 +2,7 @@
   <v-card
     :class="customClass"
     :color="color || 'background'"
-    elevation="16"
+    :elevation="elevation || 16"
     :width="width"
     :height="height"
   >
@@ -14,8 +14,9 @@
 interface Props {
   width?: string | number
   height?: string | number
-  customClass?: Array<string>
+  customClass?: Array<string> | string
   color?: string
+  elevation?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,5 +24,6 @@ const props = withDefaults(defineProps<Props>(), {
   height: '',
   customClass: undefined,
   color: undefined,
+  elevation: undefined
 })
 </script>

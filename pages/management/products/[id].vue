@@ -41,7 +41,6 @@ const categorySelections = ref<ProductCategoriesResponse>()
 const getProduct = async (productId: any) => {
   const [data, status, error] = await requestProduct(productId)
   if (status.value === 'success') {
-    console.log('product', data.value)
     product.value = data.value
   } else {
     if (error.value.statusCode == 404) {
