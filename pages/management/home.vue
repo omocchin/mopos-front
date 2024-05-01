@@ -48,14 +48,14 @@ const menuItems = [
   },
   {
     mode: 'action',
-    value: 'clock_in_out',
-    title: 'CLOCK IN/OUT',
+    value: 'payments',
+    title: 'Payments',
     disabled: true
   },
   {
     mode: 'action',
-    value: 'management', 
-    title: 'MANAGEMENT',
+    value: 'settings', 
+    title: 'Settings',
     disabled: true
   },
 ]

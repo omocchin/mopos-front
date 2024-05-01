@@ -5,6 +5,13 @@
     v-model:product-quantity="productQuantity"
     @add-product="addProduct"
   />
+  <checkout-modal
+    v-model:modal="checkoutModal"
+    v-model:cartTotal="cartTotal"
+    v-model:paymentTypes="paymentTypes"
+    v-model:receiptTypes="receiptTypes"
+    @checkoutSubmit="checkoutSubmit"
+  />
   <div class="h-100 w-100 d-flex flex-row">
     <product-category-tab
       v-model:categories="categories"
@@ -17,11 +24,26 @@
         v-model:category-products="categoryProducts"
         @productSelected="productSelected"
       />
-      <div class="w-25 pa-1 h-100" ref="checkoutTable">
+      <div class="w-25 pa-1 h-100" style="max-height: 850px;">
+        <div class="d-flex justify-end" style="height: 6%;">
+          <v-btn
+            class="ma-2 w-25"
+            color="blue-grey-darken-1"
+            @click="deleteProduct"
+          >
+            <v-icon
+              icon="mdi-backspace"
+              size="30"
+            ></v-icon>
+          </v-btn>
+        </div>
         <cart-items-window
           v-model:cashier-header="cashierHeader"
-          v-model:cart="cart"
+          v-model:cart="inCart"
           v-model:selected-cart-row="selectedCartRow"
+          v-model:subtotal="subtotal"
+          v-model:taxAmount="taxAmount"
+          v-model:cart-total="cartTotal"
           @delete-product="deleteProduct"
           @toggle-row="toggleRow"
           @checkout="checkout"
@@ -35,15 +57,23 @@
 import {
   requestCashierProductCategories,
   requestCashierCategoryProducts,
+  requestPaymentTypes,
+  requestReceiptTypes,
+  requestCheckout,
   type ProductCategoriesResponse,
   type CategoryProductsResponse,
-  type CartProduct
+  type CartProduct,
+  type SettingsResponse,
+  type PaymentTypeResponse,
+  type ReceiptTypeResponse
 } from '#imports';
 import productModal from '~/components/cashier/ProductModal.vue';
 import ProductCategoryTab from '~/components/cashier/ProdoctCategoryTab.vue'
 import ProductSelectWindow from '~/components/cashier/ProductSelectWindow.vue';
 import CartItemsWindow from '~/components/cashier/CartItemsWindow.vue';
+import CheckoutModal from '~/components/cashier/checkoutModal/CheckoutModal.vue';
 import { useCashierStore } from '~/stores/cashier'
+import { useUserStore } from '#imports';
 import { cashierHeader } from '~/utils/variables/headers/headers'
 
 definePageMeta({
@@ -52,7 +82,10 @@ definePageMeta({
 
 const cashierStore = useCashierStore()
 const { cart, addToCart, removeFromCart } = cashierStore
-const router = useRouter()
+const authStore = useAuthStore()
+const userStore = useUserStore()
+const { settings } = authStore
+const { currentUser } = userStore
 
 const selectedCategory = ref<string>()
 const categories = ref<Array<ProductCategoriesResponse>>()
@@ -61,18 +94,12 @@ const selectedProduct = ref<CategoryProductsResponse>({} as CategoryProductsResp
 const modal = ref<boolean>(false)
 const productQuantity = ref<number>(1)
 const selectedCartRow = ref<Array<number>>([])
-
-// const checkoutTable = ref(null)
-
-// get height of element
-// onMounted(()=>{
-//   console.log('aaa', checkoutTable.value)
-//   console.log(checkoutTable.value.clientWidth,checkoutTable.value.clientHeight)
-  // checkoutTable.value.height = checkoutTable.value.clientHeight
-  // const height = String(checkoutTable.value.clientHeight)
-  // checkoutTable.value.setAttribute("style", `height: ${height}px;`);
-  // tableHeight.value = true
-// })
+const subtotal = ref<number>(0)
+const checkoutModal = ref<boolean>(false)
+const inCart = ref<Array<CartProduct>>([])
+const setting = ref<SettingsResponse>()
+const paymentTypes = ref<Array<PaymentTypeResponse>>([])
+const receiptTypes = ref<Array<ReceiptTypeResponse>>([])
 
 const toggleRow = (row: number) => {
   if (selectedCartRow.value.includes(row)) {
@@ -99,6 +126,16 @@ const getproductCategories = async () => {
   selectedCategory.value = data.value?.[0].name
 }
 
+const getPaymentTypes = async () => {
+  const [data, status, error] = await requestPaymentTypes()
+  paymentTypes.value = data.value
+}
+
+const getReceiptTypes = async () => {
+  const [data, status, error] = await requestReceiptTypes()
+  receiptTypes.value = data.value
+}
+
 const getproductCategoryProducts = async (category: string | undefined) => {
   const [data, status, error] = await requestCashierCategoryProducts(category)
   categoryProducts.value = data.value
@@ -107,7 +144,12 @@ const getproductCategoryProducts = async (category: string | undefined) => {
 onMounted(async () => {
   nextTick(async () => {
     await getproductCategories()
+    await getPaymentTypes()
+    await getReceiptTypes()
   })
+  inCart.value = cart
+  setting.value = settings
+  setSubtotal(cart)
 })
 
 const productSelected = (product: string) => {
@@ -130,8 +172,34 @@ const addProduct = () => {
 }
 
 const checkout = () => {
-  router.push({path: '/cashier/checkout'})
+  checkoutModal.value = true
 }
+
+const setSubtotal = (products: Array<CartProduct>) => {
+  products.forEach((product) => {
+    subtotal.value += (product.price * product.buy_quantity)
+  })
+}
+
+const checkoutSubmit = async (event:any) => {
+  const params = {
+    ...event,
+    user_number: currentUser,
+    subtotal: subtotal.value,
+    tax_total: Number(taxAmount.value.toFixed(2)),
+    total: Number(cartTotal.value.toFixed(2)),
+    items: cart
+  }
+  const [data, status, error] = await requestCheckout(params)
+}
+
+const taxAmount = computed(() => {
+  return  subtotal.value * setting.value?.tax/100
+})
+
+const cartTotal = computed(() => {
+  return subtotal.value + taxAmount.value
+})
 
 watch(selectedCategory, (value) => {
   getproductCategoryProducts(value)
@@ -140,4 +208,13 @@ watch(selectedCategory, (value) => {
 watch(modal, (value) => {
   if (value) productQuantity.value = 1
 })
+
+watch(() => cashierStore.cart,
+  (newCart) => {
+    subtotal.value = 0
+    setSubtotal(newCart)
+    inCart.value = newCart
+  },
+  { deep: true }
+)
 </script>

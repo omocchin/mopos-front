@@ -8,6 +8,14 @@ interface CreateCompanyUserRequest {
   password: string
 }
 
+interface SettingsResponse {
+  id: number
+  company_id: number
+  service_charge_type_id: number
+  tax: number
+  service_charge_amount: number
+}
+
 const requestCreateCompanyUser = async (body: CreateCompanyUserRequest) => {
   const { data, status, error } = await useApiFetch('v1/company_user/create_company', {
     method: 'POST',
@@ -17,10 +25,19 @@ const requestCreateCompanyUser = async (body: CreateCompanyUserRequest) => {
   return [data, status, error]
 }
 
+const requestSettings = async () => {
+  const { data, status, error } = await useApiFetch('v1/company_user/settings', {
+    method: 'GET'
+  })
+  return [data, status, error]
+}
+
 export {
-  requestCreateCompanyUser
+  requestCreateCompanyUser,
+  requestSettings
 }
 
 export type {
   CreateCompanyUserRequest,
+  SettingsResponse,
 }

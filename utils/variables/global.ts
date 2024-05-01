@@ -1,4 +1,4 @@
-const ITEMS_PER_TABLE = 1
+const ITEMS_PER_TABLE = 10
 
 export {
   ITEMS_PER_TABLE

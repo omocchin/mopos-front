@@ -70,7 +70,7 @@ import { requestCompanyTokenAuth } from '~/composables/useAuth'
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const router = useRouter()
-const { companyName, companyLogout } = authStore
+const { companyName, companyLogout, companySetting } = authStore
 const { activeUsers, currentUser, setCurrentUser } = userStore
 
 const drawer = ref<boolean>(false)
@@ -114,6 +114,7 @@ onBeforeMount(async () => {
     if (companyStatus.value === 'error') {
       dialog.value = true
     }
+    companySetting()
   })
 })
 

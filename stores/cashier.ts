@@ -1,3 +1,5 @@
+// import { productMultiplication } from '~/utils/functions/calculation';
+
 interface CartProduct {
   id: number
   name: string
@@ -11,7 +13,19 @@ export const useCashierStore = defineStore('cashier', () => {
   const cart = ref<Array<CartProduct>>([])
 
   const addToCart = (product: CartProduct) => {
-    cart.value.push(product)
+    if (cart.value.some(cartProduct => cartProduct.item_code === product.item_code)) {
+      cart.value = cart.value.map(cartProduct => {
+        if (cartProduct.item_code === product.item_code) {
+          return {
+            ...cartProduct,
+            buy_quantity: cartProduct.buy_quantity + product.buy_quantity
+          }
+        }
+        return cartProduct
+      })
+    } else {
+      cart.value.push(product)
+    }
   }
 
   const removeFromCart = (rowIndexes?: Array<number>) => {
