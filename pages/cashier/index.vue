@@ -1,4 +1,10 @@
 <template>
+  <base-snack-bar
+    :model-value="error"
+    :message="errorMessage"
+    color="error"
+    @close-bar="closeBar"
+  />
   <product-modal
     v-model:modal="modal"
     v-model:product="selectedProduct"
@@ -59,19 +65,20 @@ import {
   requestCashierCategoryProducts,
   requestPaymentTypes,
   requestReceiptTypes,
-  requestCheckout,
   type ProductCategoriesResponse,
   type CategoryProductsResponse,
   type CartProduct,
   type SettingsResponse,
   type PaymentTypeResponse,
-  type ReceiptTypeResponse
+  type ReceiptTypeResponse,
+  type checkoutResponse
 } from '#imports';
 import productModal from '~/components/cashier/ProductModal.vue';
 import ProductCategoryTab from '~/components/cashier/ProdoctCategoryTab.vue'
 import ProductSelectWindow from '~/components/cashier/ProductSelectWindow.vue';
 import CartItemsWindow from '~/components/cashier/CartItemsWindow.vue';
 import CheckoutModal from '~/components/cashier/checkoutModal/CheckoutModal.vue';
+import BaseSnackBar from '~/components/ui/BaseSnackBar.vue';
 import { useCashierStore } from '~/stores/cashier'
 import { useUserStore } from '#imports';
 import { cashierHeader } from '~/utils/variables/headers/headers'
@@ -81,9 +88,10 @@ definePageMeta({
 })
 
 const cashierStore = useCashierStore()
-const { cart, addToCart, removeFromCart } = cashierStore
+const { cart, addToCart, removeFromCart, cashierCheckout } = cashierStore
 const authStore = useAuthStore()
 const userStore = useUserStore()
+const router = useRouter()
 const { settings } = authStore
 const { currentUser } = userStore
 
@@ -100,6 +108,8 @@ const inCart = ref<Array<CartProduct>>([])
 const setting = ref<SettingsResponse>()
 const paymentTypes = ref<Array<PaymentTypeResponse>>([])
 const receiptTypes = ref<Array<ReceiptTypeResponse>>([])
+const error = ref<boolean>(false)
+const errorMessage = ref<string>('')
 
 const toggleRow = (row: number) => {
   if (selectedCartRow.value.includes(row)) {
@@ -190,7 +200,17 @@ const checkoutSubmit = async (event:any) => {
     total: Number(cartTotal.value.toFixed(2)),
     items: cart
   }
-  const [data, status, error] = await requestCheckout(params)
+  await cashierCheckout(params).then((data: checkoutResponse) => {
+    const checkoutId = data.id
+    router.push({path: '/cashier/checkout/' + checkoutId})
+  }).catch((e) => {
+    error.value = true
+    errorMessage.value = 'Failed to complete transaction.'
+  })
+}
+
+const closeBar = () => {
+  error.value = false
 }
 
 const taxAmount = computed(() => {

@@ -33,6 +33,15 @@ interface checkoutRequest {
   card_info: object
 }
 
+interface checkoutResponse {
+  id: number
+}
+
+interface checkoutInfoResponse {
+  id: number,
+  change: number
+}
+
 const requestCashierProductCategories = async () => {
   const { data, status, error } = await useApiFetch('v1/cashier/categories', {
     method: 'GET',
@@ -69,16 +78,27 @@ const requestCheckout = async (body: checkoutRequest) => {
   return [data, status, error]
 }
 
+const requestCheckoutInfo = async (checkoutId: number) => {
+  const { data, status, error } = await useApiFetch(`v1/cashier/checkout/${checkoutId}`, {
+    method: 'GET'
+  })
+  return [data, status, error]
+}
+
 export {
   requestCashierProductCategories,
   requestCashierCategoryProducts,
   requestPaymentTypes,
   requestReceiptTypes,
-  requestCheckout
+  requestCheckout,
+  requestCheckoutInfo
 }
 
 export type {
   CategoryProductsResponse,
   PaymentTypeResponse,
-  ReceiptTypeResponse
+  ReceiptTypeResponse,
+  checkoutRequest,
+  checkoutResponse,
+  checkoutInfoResponse
 }

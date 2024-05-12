@@ -1,4 +1,6 @@
-// import { productMultiplication } from '~/utils/functions/calculation';
+import { requestCheckout, type checkoutRequest, type checkoutResponse } from "#imports"
+import { CustomError } from "~/utils/classes/customs"
+import { type ErrorResponse } from "~/utils/interfaces/errors"
 
 interface CartProduct {
   id: number
@@ -36,10 +38,23 @@ export const useCashierStore = defineStore('cashier', () => {
     }
   }
 
+  const cashierCheckout = async (params: checkoutRequest) => {
+    const [data, status, error] = await requestCheckout(params)
+    const response: checkoutResponse = data.value
+    const errorResponse: ErrorResponse = error.value
+    if (status.value === 'success') {
+      cart.value = []
+      return response
+    } else {
+      throw new CustomError(errorResponse.data.message,  { status: error.value.statusCode })
+    }
+  }
+
   return {
     cart,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    cashierCheckout
   }
 },
 {
