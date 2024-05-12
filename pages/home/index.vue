@@ -11,6 +11,7 @@
         :link="menu.link"
         :style="'font-size: 4vw;'"
         :value="menu.value"
+        :disabled="menu.disabled"
         @action="menuEvent"
       >
         {{ menu.title }}
@@ -35,7 +36,8 @@ const menuItems = [
   {
     mode: 'to',
     title: 'HISTORY',
-    link: '/auth/login'
+    link: '/auth/login',
+    disabled: true
   },
   {
     mode: 'action',
