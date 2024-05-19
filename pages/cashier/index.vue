@@ -93,7 +93,7 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const router = useRouter()
 const { settings } = authStore
-const { currentUser } = userStore
+const currentUser = computed(() => userStore.currentUser)
 
 const selectedCategory = ref<string>()
 const categories = ref<Array<ProductCategoriesResponse>>()
@@ -182,7 +182,12 @@ const addProduct = () => {
 }
 
 const checkout = () => {
-  checkoutModal.value = true
+  if (!currentUser.value) {
+    error.value = true
+    errorMessage.value = 'Select user before checkout'
+  } else {
+    checkoutModal.value = true
+  }
 }
 
 const setSubtotal = (products: Array<CartProduct>) => {

@@ -62,7 +62,7 @@
             @del-cash="delCash"
           />
           <card-payment-input
-            v-if="paymentMethod.value.value?.name === 'credit_card'"
+            v-else-if="paymentMethod.value.value?.name === 'credit_card'"
             v-model:card-number="cardNumber"
             v-model:card-name="cardName"
             v-model:card-security-code="cardSecurityCode"
@@ -187,6 +187,9 @@ const { values, validate, setFieldValue } = useForm<checkoutForm>({
       }
       return true
     },
+  },
+  initialValues: {
+    cashAmount: ''
   }
 })
 

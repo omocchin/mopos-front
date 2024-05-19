@@ -12,7 +12,7 @@
         :key="category.id"
         :value="category.name"
       >
-        Content {{ category.name }}
+        {{ category.name }}
       </v-tab>
     </v-tabs>
   </div>
