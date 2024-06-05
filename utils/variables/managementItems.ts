@@ -18,18 +18,6 @@ const managementItems = [
     icon: 'mdi-package'
   },
   {
-    title: 'USERS',
-    action: 'url',
-    url: '/management/users',
-    icon: 'mdi-account'
-  },
-  {
-    title: 'USERS',
-    action: 'url',
-    url: '/management/users',
-    icon: 'mdi-account'
-  },
-  {
     title: 'SIGNOUT',
     action: 'event',
     value: 'signout',
