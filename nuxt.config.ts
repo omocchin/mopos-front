@@ -22,7 +22,11 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      baseUrl: process.env.BASE_URL
+      baseUrl: process.env.BASE_URL,
+      demoCompanyLoginId: process.env.DEMO_COMPANY_LOGIN_ID,
+      demoCompanyLoginPassword: process.env.DEMO_COMPANY_LOGIN_PASSWORD,
+      demoUserLoginId: process.env.DEMO_USER_LOGIN_ID,
+      demoUserLoginPassword: process.env.DEMO_USER_LOGIN_PASSWORD
     }
   },
   googleFonts: {

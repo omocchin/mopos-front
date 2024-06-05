@@ -1,5 +1,8 @@
 <template>
-  <auth-base title="USER LOGIN">
+  <auth-base
+    title="USER LOGIN"
+    @demo-login="demoLogin"
+  >
     <form @submit.prevent>
       <custom-input
         label="User Login ID"
@@ -53,6 +56,23 @@ const login = async () => {
   await userLogin({
     login_id: loginId.value,
     password: password.value
+  }).then((data) => {
+    setError(false, '')
+    router.push({path: '/management/home'})
+  }).catch((e) => {
+    if (e.status == 404) {
+      setError(true, 'Incorrect ID or password. Please try again.')
+    } else {
+      setError(true, e.message)
+    }
+  })
+}
+
+const demoLogin = async () => {
+  const config = useRuntimeConfig()
+  await userLogin({
+    login_id: config.public.demoUserLoginId,
+    password: config.public.demoUserLoginPassword
   }).then((data) => {
     setError(false, '')
     router.push({path: '/management/home'})
