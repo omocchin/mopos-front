@@ -1,9 +1,5 @@
 const authorities = [
   {
-    id: 1,
-    name: 'Master'
-  },
-  {
     id: 2,
     name: 'Company master'
   },
@@ -17,6 +13,18 @@ const authorities = [
   }
 ]
 
+const signUpAuthorities = [
+  {
+    id: 2,
+    name: 'Company master'
+  },
+  {
+    id: 3,
+    name: 'Company manager'
+  },
+]
+
 export {
-  authorities
+  authorities,
+  signUpAuthorities
 }

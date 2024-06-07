@@ -1,6 +1,22 @@
 <template>
-  <auth-base title="SIGNUP">
-    <sign-up-form v-if="!signUpCompletion" @sign-up-complete="signUpCompletion = !signUpCompletion"/>
+  <auth-base
+    title="SIGNUP"
+    :sub-title="subTitle"
+  >
+    <v-btn
+      v-if="signUpPage == 'user'"
+      class="ma-2"
+      density="compact"
+      icon="mdi-arrow-left"
+      variant="text"
+      @click="changeInput('company', 'Company Information')"
+    ></v-btn>
+    <sign-up-form
+      v-if="!signUpCompletion"
+      @sign-up-complete="signUpCompletion = !signUpCompletion"
+      @change-input="changeInput"
+      :sign-up-page="signUpPage"
+    />
     <sign-up-completion v-else-if="signUpCompletion"/>
     <custom-button
       mode="link"
@@ -21,4 +37,11 @@ const snackBar = ref<boolean>(false)
 const barMessage = ref<string>('')
 const barColor = ref<string>('')
 const signUpCompletion = ref<boolean>(false)
+const subTitle = ref<string>('Company Information')
+const signUpPage = ref<string>('company')
+
+const changeInput = (page: string, title: string) => {
+  signUpPage.value = page
+  subTitle.value = title
+}
 </script>

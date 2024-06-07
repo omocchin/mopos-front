@@ -17,7 +17,7 @@ interface SettingsResponse {
 }
 
 const requestCreateCompanyUser = async (body: CreateCompanyUserRequest) => {
-  const { data, status, error } = await useApiFetch('v1/company_user/create_company', {
+  const { data, status, error } = await useApiFetch('v1/company_user/create_company_user', {
     method: 'POST',
     body: body
   }

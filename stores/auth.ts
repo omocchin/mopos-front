@@ -1,7 +1,9 @@
 import { requestCompanyLogin, requestCompanyLogout, requestSettings, type CompanyLoginResponse, type SettingsResponse } from "#imports"
 import { CustomError } from "~/utils/classes/customs"
 import { type ErrorResponse } from "~/utils/interfaces/errors"
-// import { useUserStore } from '~/stores/user'
+import { ref } from "vue"
+import { defineStore } from "pinia"
+import { useUserStore } from "./user"
 
 interface UserInfo {
   name: string
