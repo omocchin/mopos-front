@@ -30,7 +30,7 @@
         item-value="user_number"
         prepend-icon="mdi-account"
         label="Current User"
-        no-data-text="No users available"
+        no-data-text="No users available. Please clock in."
         hide-details
       />
     </v-app-bar>

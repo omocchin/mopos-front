@@ -12,7 +12,7 @@
       @click="emits('demoLogin')"
     >
       {{ route.path.includes('management') ? 'DEMO USER LOGIN' : 'DEMO COMPANY LOGIN' }}
-  </v-btn>
+    </v-btn>
   </div>
 </template>
 

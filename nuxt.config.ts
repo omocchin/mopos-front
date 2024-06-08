@@ -27,7 +27,8 @@ export default defineNuxtConfig({
       demoCompanyLoginId: process.env.DEMO_COMPANY_LOGIN_ID,
       demoCompanyLoginPassword: process.env.DEMO_COMPANY_LOGIN_PASSWORD,
       demoUserLoginId: process.env.DEMO_USER_LOGIN_ID,
-      demoUserLoginPassword: process.env.DEMO_USER_LOGIN_PASSWORD
+      demoUserLoginPassword: process.env.DEMO_USER_LOGIN_PASSWORD,
+      demoUserNumber: process.env.DEMO_USER_NUMBER
     }
   },
   googleFonts: {

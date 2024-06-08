@@ -11,6 +11,14 @@
       <base-card :customClass="['h-100', 'w-100', 'rounded-lg']" :color="'primary'">
         <div class="d-flex align-center flex-column w-100 h-25 pa-3">
           <p class="text-h5">Enter Employee Number</p>
+          <v-btn
+            v-if="companyId != config.public.demoCompanyId ? false : true"
+            variant="text"
+            color="accent"
+            @click="clockInOut(Number(config.public.demoUserNumber))"
+          >
+            DEMO EMPLOYEE CLOCK IN/OUT
+          </v-btn>
           <v-text-field
             class="w-75 mt-2 rounded-lg num-text"
             v-model="employeeNumber"
@@ -55,9 +63,13 @@ import { type ClockInOutResponse } from '#imports';
 
 const emits = defineEmits(['close'])
 
+const route = useRoute()
+const authStore = useAuthStore()
 const store = useUserStore()
+const { companyId } = authStore
 const { userClockInOut } = store
 const employeeNumber = ref<string>('')
+const config = useRuntimeConfig()
 
 const error = ref(false)
 const errorMessage = ref()
@@ -85,6 +97,21 @@ const funcButtons = ref([
   },
 ])
 
+const clockInOut = async (userNumber: number) => {
+  await userClockInOut({user_number: userNumber}).then((data) => {
+    setError(false, '')
+    employeeNumber.value = ''
+    close(data)
+  }).catch((e) => {
+    if (e.status == 404) {
+      setError(true, 'Employee not found. Please try again.')
+    }
+    else {
+      setError(true, e.message)
+    }
+  })
+}
+
 const clockAction = async (enteredValue: string) => {
   if (enteredValue == undefined) {
     return
@@ -94,18 +121,7 @@ const clockAction = async (enteredValue: string) => {
   } else if (enteredValue == funcButtons.value[1].value) {
     employeeNumber.value = ''
   } else if (enteredValue == funcButtons.value[2].value) {
-    await userClockInOut({user_number: Number(employeeNumber.value)}).then((data) => {
-      setError(false, '')
-      employeeNumber.value = ''
-      close(data)
-    }).catch((e) => {
-      if (e.status == 404) {
-        setError(true, 'Employee not found. Please try again.')
-      }
-      else {
-        setError(true, e.message)
-      }
-    })
+    await clockInOut(Number(employeeNumber.value))
   } else {
     employeeNumber.value = employeeNumber.value + enteredValue
   }
